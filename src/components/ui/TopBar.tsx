@@ -79,85 +79,96 @@ export function TopBar() {
   }
 
   return (
-    <header className="flex shrink-0 flex-col rounded-2xl border border-zinc-800/80 bg-zinc-950/90 text-zinc-100 shadow-sm backdrop-blur-md">
+    <header className="flex shrink-0 items-stretch overflow-hidden rounded-2xl border border-zinc-800/80 bg-zinc-950/90 text-zinc-100 shadow-sm backdrop-blur-md">
       {/* ============================================================ */}
-      {/* FILA 1: Identidad Institucional, Proyecto, Curso y Docente   */}
+      {/* ESCUDO OFICIAL UNASAM: Aprovecha casi todo el alto del header */}
       {/* ============================================================ */}
-      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-zinc-800/80 px-3.5 py-2 sm:px-4">
-        {/* Identidad Institucional y Proyecto */}
-        <div className="flex min-w-0 items-center gap-3">
-          {/* Escudo oficial UNASAM */}
-          <div className="flex h-9 w-8 shrink-0 items-center justify-center rounded-lg border border-zinc-700/80 bg-zinc-900 p-0.5 shadow-xs">
-            <img
-              src={ACADEMIC_INFO.university.logoUrl}
-              alt={ACADEMIC_INFO.university.logoAlt}
-              className="h-full w-full object-contain"
-              width={483}
-              height={600}
-            />
-          </div>
-
-          {/* Insignia 83A */}
-          <div
-            className="hidden h-7 w-7 shrink-0 items-center justify-center rounded-md border border-zinc-700 bg-zinc-800 font-mono text-[11px] font-bold text-white sm:flex"
-            title="Circuito integrado 74LS83A (DIP-16)"
-          >
-            83A
-          </div>
-
-          {/* Textos del proyecto y facultad */}
-          <div className="min-w-0 leading-tight">
-            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-              <h1 className="text-sm font-bold tracking-tight text-white">
-                {ACADEMIC_INFO.shortTitle}
-              </h1>
-              <span className="rounded-md border border-zinc-800 bg-zinc-900 px-1.5 py-0.5 font-mono text-[10px] text-zinc-300">
-                {ACADEMIC_INFO.chipModel}
-              </span>
-              <span className="rounded-md border border-zinc-700 bg-zinc-800 px-1.5 py-0.5 font-mono text-[10px] font-bold text-white">
-                {ACADEMIC_INFO.university.shortName}
-              </span>
-            </div>
-            <p className="mt-0.5 text-[11px] text-zinc-400">
-              <span className="font-medium text-zinc-200">
-                {ACADEMIC_INFO.projectSubtitle}
-              </span>
-              <span className="mx-1.5 text-zinc-600">·</span>
-              <span className="text-zinc-400">
-                {ACADEMIC_INFO.faculty} · {ACADEMIC_INFO.career}
-              </span>
-            </p>
-          </div>
-        </div>
-
-        {/* Cátedra: Asignatura y Docente titular (Bento Cards) */}
-        <div className="flex flex-wrap items-center gap-2 text-xs">
-          {/* Curso */}
-          <div className="flex items-center gap-1.5 rounded-xl border border-zinc-800 bg-zinc-900/60 px-3 py-1.5">
-            <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-zinc-400">
-              Curso:
-            </span>
-            <span className="font-semibold text-white">
-              {ACADEMIC_INFO.course}
-            </span>
-          </div>
-
-          {/* Docente */}
-          <div className="flex items-center gap-1.5 rounded-xl border border-zinc-800 bg-zinc-900/60 px-3 py-1.5">
-            <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-zinc-400">
-              Docente:
-            </span>
-            <span className="font-mono text-xs font-semibold tracking-wide text-white">
-              {ACADEMIC_INFO.instructor}
-            </span>
-          </div>
+      <div className="flex shrink-0 self-stretch items-center justify-center border-r border-zinc-800/80 bg-zinc-900/40 px-2 py-1.5 sm:px-3 sm:py-2">
+        <div
+          className="flex h-full max-h-[86px] min-h-[54px] sm:max-h-[92px] w-auto aspect-[483/600] items-center justify-center rounded-xl border border-zinc-700/80 bg-zinc-900/90 p-1 shadow-xs transition-transform duration-200 hover:scale-105"
+          title={`${ACADEMIC_INFO.university.name} (${ACADEMIC_INFO.university.shortName})`}
+        >
+          <img
+            src={ACADEMIC_INFO.university.logoUrl}
+            alt={ACADEMIC_INFO.university.logoAlt}
+            className="h-full w-full object-contain drop-shadow"
+            width={483}
+            height={600}
+          />
         </div>
       </div>
 
       {/* ============================================================ */}
-      {/* FILA 2: Integrantes del Equipo + Controles del Simulador     */}
+      {/* CONTENIDO PRINCIPAL: Fila 1 (Proyecto/Cátedra) y Fila 2 (Equipo/Controles) */}
       {/* ============================================================ */}
-      <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 bg-zinc-950/40 px-3.5 py-2 sm:px-4">
+      <div className="flex min-w-0 flex-1 flex-col justify-between">
+        {/* ============================================================ */}
+        {/* FILA 1: Identidad Institucional, Proyecto, Curso y Docente   */}
+        {/* ============================================================ */}
+        <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1.5 border-b border-zinc-800/80 px-3 py-1.5 sm:px-4 sm:py-2">
+          {/* Identidad del Proyecto */}
+          <div className="flex min-w-0 items-center gap-2.5">
+            {/* Insignia 83A */}
+            <div
+              className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-zinc-700 bg-zinc-800 font-mono text-[11px] font-bold text-white shadow-xs"
+              title="Circuito integrado 74LS83A (DIP-16)"
+            >
+              83A
+            </div>
+
+            {/* Textos del proyecto y facultad */}
+            <div className="min-w-0 leading-tight">
+              <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                <h1 className="text-sm font-bold tracking-tight text-white">
+                  {ACADEMIC_INFO.shortTitle}
+                </h1>
+                <span className="rounded-md border border-zinc-800 bg-zinc-900 px-1.5 py-0.5 font-mono text-[10px] text-zinc-300">
+                  {ACADEMIC_INFO.chipModel}
+                </span>
+                <span className="rounded-md border border-zinc-700 bg-zinc-800 px-1.5 py-0.5 font-mono text-[10px] font-bold text-white">
+                  {ACADEMIC_INFO.university.shortName}
+                </span>
+              </div>
+              <p className="mt-0.5 text-[11px] text-zinc-400">
+                <span className="font-medium text-zinc-200">
+                  {ACADEMIC_INFO.projectSubtitle}
+                </span>
+                <span className="mx-1.5 text-zinc-600">·</span>
+                <span className="text-zinc-400">
+                  {ACADEMIC_INFO.faculty} · {ACADEMIC_INFO.career}
+                </span>
+              </p>
+            </div>
+          </div>
+
+          {/* Cátedra: Asignatura y Docente titular (Bento Cards) */}
+          <div className="flex flex-wrap items-center gap-2 text-xs">
+            {/* Curso */}
+            <div className="flex items-center gap-1.5 rounded-xl border border-zinc-800 bg-zinc-900/60 px-3 py-1.5">
+              <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-zinc-400">
+                Curso:
+              </span>
+              <span className="font-semibold text-white">
+                {ACADEMIC_INFO.course}
+              </span>
+            </div>
+
+            {/* Docente */}
+            <div className="flex items-center gap-1.5 rounded-xl border border-zinc-800 bg-zinc-900/60 px-3 py-1.5">
+              <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-zinc-400">
+                Docente:
+              </span>
+              <span className="font-mono text-xs font-semibold tracking-wide text-white">
+                {ACADEMIC_INFO.instructor}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* ============================================================ */}
+        {/* FILA 2: Integrantes del Equipo + Controles del Simulador     */}
+        {/* ============================================================ */}
+        <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 bg-zinc-950/40 px-3 py-1.5 sm:px-4 sm:py-2">
         {/* Integrantes del equipo (todos visibles directamente) */}
         <div className="flex min-w-0 flex-wrap items-center gap-2">
           <div className="flex shrink-0 items-center gap-1.5 font-mono text-[10.5px] font-semibold text-zinc-300">
@@ -295,6 +306,7 @@ export function TopBar() {
           </button>
         </div>
       </div>
-    </header>
+    </div>
+  </header>
   );
 }
