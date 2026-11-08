@@ -1,0 +1,6 @@
+# robots.txt para 74LS83 Lab
+User-agent: *
+Allow: /
+
+Sitemap: https://74ls83-simulator.vercel.app/sitemap.xml
+

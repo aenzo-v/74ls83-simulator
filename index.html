@@ -2,40 +2,147 @@
 <html lang="es" class="dark">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>74LS83 Lab — Simulador 3D del sumador binario de 4 bits</title>
+
+    <link rel="canonical" href="https://74ls83-simulator.vercel.app/" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="manifest" href="/site.webmanifest" />
     <meta name="theme-color" content="#10141B" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+
     <meta
       name="description"
-      content="Simulador educativo 3D interactivo del circuito integrado 74LS83A / SN74LS83A (sumador binario completo de 4 bits con acarreo anticipado) sobre protoboard MB-102. Modos circuito montado y montaje guiado con validación eléctrica real de netlist en tiempo real."
+      content="Simulador educativo 3D interactivo del sumador binario 74LS83A sobre protoboard MB-102. Montaje guiado, validación de netlist y cálculo digital en tiempo real."
     />
     <meta
       name="keywords"
-      content="74LS83, 74LS83A, sumador binario, 4 bits, TTL, protoboard 3D, Three.js, React Three Fiber, simulador de circuitos, ingeniería electrónica"
+      content="74LS83, 74LS83A, sumador binario, 4 bits, TTL, protoboard 3D, Three.js, React Three Fiber, simulador de circuitos, ingeniería electrónica, UNASAM, sistemas digitales, acarreo anticipado"
     />
     <meta name="author" content="UNASAM · Alexis Enzo Machaca Barrenechea, Kevin Polo Saavedra, Jeremy Ramirez Lopez" />
 
-    <!-- Open Graph / Redes Sociales -->
+    <!-- Open Graph / Redes Sociales (Facebook, WhatsApp, LinkedIn) -->
+    <meta property="og:site_name" content="74LS83 Lab" />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="es_ES" />
+    <meta property="og:url" content="https://74ls83-simulator.vercel.app/" />
     <meta property="og:title" content="74LS83 Lab — Simulador 3D del sumador binario de 4 bits" />
     <meta
       property="og:description"
-      content="Simulador educativo 3D interactivo del sumador binario de 4 bits 74LS83A sobre protoboard MB-102 con validación eléctrica y lógica digital real. UNASAM · Facultad de Ciencias · Ingeniería de Sistemas e Informática."
+      content="Aprende y ensambla el circuito sumador 74LS83A sobre protoboard 3D realista con validación eléctrica de netlist en tiempo real. UNASAM · Sistemas Digitales."
     />
-    <meta property="og:image" content="/unasam-logo.png" />
+    <meta property="og:image" content="https://74ls83-simulator.vercel.app/og-image.png" />
+    <meta property="og:image:secure_url" content="https://74ls83-simulator.vercel.app/og-image.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="74LS83 Lab — Simulador 3D interactivo del sumador binario de 4 bits 74LS83A" />
 
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary" />
+    <!-- Twitter / X Cards -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://74ls83-simulator.vercel.app/" />
     <meta name="twitter:title" content="74LS83 Lab — Simulador 3D del sumador binario de 4 bits" />
     <meta
       name="twitter:description"
-      content="Aprende y ensambla paso a paso el circuito 74LS83A sobre una protoboard 3D realista con validación eléctrica de netlist en tiempo real. UNASAM · Sistemas Digitales."
+      content="Simulador 3D interactivo del sumador binario 74LS83A sobre protoboard MB-102 con validación eléctrica real. UNASAM · Sistemas Digitales."
     />
+    <meta name="twitter:image" content="https://74ls83-simulator.vercel.app/og-image.png" />
+    <meta name="twitter:image:alt" content="74LS83 Lab — Simulador 3D del sumador binario 74LS83A" />
 
-    <title>74LS83 Lab — Simulador 3D del sumador binario de 4 bits</title>
+    <!-- Datos estructurados (Schema.org / JSON-LD) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "74LS83 Lab",
+        "alternateName": "Simulador 3D del CI 74LS83A",
+        "url": "https://74ls83-simulator.vercel.app/",
+        "image": "https://74ls83-simulator.vercel.app/og-image.png",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "All",
+        "browserRequirements": "Navegador web moderno con aceleración WebGL 2.0 y soporte ECMAScript 2022+",
+        "description": "Simulador educativo 3D interactivo del circuito integrado 74LS83A / SN74LS83A (sumador binario de 4 bits con acarreo anticipado) sobre protoboard MB-102 con validación eléctrica real de netlist.",
+        "inLanguage": "es",
+        "isAccessibleForFree": true,
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "author": {
+          "@type": "EducationalOrganization",
+          "name": "Universidad Nacional Santiago Antúnez de Mayolo",
+          "alternateName": "UNASAM",
+          "department": "Facultad de Ciencias · Escuela Profesional de Ingeniería de Sistemas e Informática",
+          "location": {
+            "@type": "PostalAddress",
+            "addressLocality": "Huaraz",
+            "addressRegion": "Áncash",
+            "addressCountry": "PE"
+          }
+        },
+        "creator": [
+          {
+            "@type": "Person",
+            "name": "Alexis Enzo Machaca Barrenechea"
+          },
+          {
+            "@type": "Person",
+            "name": "Kevin Polo Saavedra"
+          },
+          {
+            "@type": "Person",
+            "name": "Jeremy Ramirez Lopez"
+          }
+        ],
+        "about": [
+          {
+            "@type": "Thing",
+            "name": "SN74LS83A"
+          },
+          {
+            "@type": "Thing",
+            "name": "Sumador binario completo de 4 bits"
+          },
+          {
+            "@type": "Thing",
+            "name": "Familia Lógica TTL"
+          },
+          {
+            "@type": "Thing",
+            "name": "Protoboard MB-102"
+          }
+        ]
+      }
+    </script>
   </head>
   <body class="bg-[#10141B] text-[#E9EDF2] antialiased selection:bg-[#35C2D1]/30 selection:text-[#E9EDF2]">
+    <!-- Respaldo semántico accesible para indexación y usuarios sin soporte WebGL/JavaScript -->
+    <noscript>
+      <div style="max-width: 800px; margin: 40px auto; padding: 24px; font-family: system-ui, sans-serif; background-color: #121720; border: 1px solid #222B38; border-radius: 12px; color: #E9EDF2; line-height: 1.6;">
+        <h1 style="color: #38BDF8; font-size: 1.8rem; margin-top: 0;">74LS83 Lab — Simulador 3D del sumador binario de 4 bits</h1>
+        <p><strong>Universidad Nacional Santiago Antúnez de Mayolo (UNASAM)</strong> · Facultad de Ciencias · Escuela Profesional de Ingeniería de Sistemas e Informática · Cátedra de Sistemas Digitales.</p>
+        <p>Esta aplicación interactiva requiere que JavaScript y WebGL estén habilitados para cargar el entorno tridimensional de laboratorio.</p>
+
+        <h2 style="color: #E2E8F0; font-size: 1.3rem; margin-top: 24px;">Circuito Integrado SN74LS83A (DIP-16)</h2>
+        <p>Sumador binario completo de 4 bits con lógica de acarreo rápido (look-ahead carry). Polarización canónica: VCC en Pin 5 (+5 V) y GND en Pin 12 (Tierra).</p>
+        <p>Disposición canónica de pines:</p>
+        <ul>
+          <li><strong>Entradas Sumando A:</strong> A0 (Pin 10), A1 (Pin 8), A2 (Pin 3), A3 (Pin 1)</li>
+          <li><strong>Entradas Sumando B:</strong> B0 (Pin 11), B1 (Pin 7), B2 (Pin 4), B3 (Pin 16)</li>
+          <li><strong>Acarreo Inicial:</strong> C0 / Cin (Pin 13)</li>
+          <li><strong>Salidas de Suma:</strong> S0 (Pin 9), S1 (Pin 6), S2 (Pin 2), S3 (Pin 15)</li>
+          <li><strong>Acarreo Final:</strong> C4 / Cout (Pin 14)</li>
+        </ul>
+
+        <h2 style="color: #E2E8F0; font-size: 1.3rem; margin-top: 24px;">Modos de Laboratorio</h2>
+        <ul>
+          <li><strong>Circuito Montado:</strong> Protoboard MB-102 completamente ensamblada para operar los 9 bits de entrada (A, B y C0) y verificar la suma bit a bit en tiempo real con desgloses binarios, hexadecimales y decimales.</li>
+          <li><strong>Montaje Guiado:</strong> 9 etapas progresivas para que el estudiante ensamble el circuito paso a paso con validación de netlist y reglas de diseño eléctrico.</li>
+        </ul>
+      </div>
+    </noscript>
+
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

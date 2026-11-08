@@ -1,0 +1,19 @@
+{
+  "name": "74LS83 Lab — Simulador 3D del sumador binario",
+  "short_name": "74LS83 Lab",
+  "description": "Simulador educativo 3D del circuito integrado 74LS83A sobre protoboard MB-102.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#10141B",
+  "theme_color": "#10141B",
+  "lang": "es",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
+
