@@ -94,31 +94,31 @@ export function GuidedAssemblyPanel() {
     switch (status) {
       case 'completed':
         return (
-          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#6DD19C]/20 font-mono text-[10px] font-bold text-[#6DD19C]">
+          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-zinc-800 border border-zinc-600 font-mono text-[10px] font-bold text-white">
             ✓
           </span>
         );
       case 'invalidated':
         return (
-          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#F06A6A]/20 font-mono text-[10px] font-bold text-[#F06A6A]">
+          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-zinc-900 border border-zinc-500 font-mono text-[10px] font-bold text-white">
             !
           </span>
         );
       case 'current':
         return (
-          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#F1B85A]/25 font-mono text-[10px] font-bold text-[#F1B85A] ring-1 ring-[#F1B85A]">
+          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white font-mono text-[10px] font-bold text-black ring-2 ring-white/60 shadow-xs">
             {isCurrent ? '▶' : '•'}
           </span>
         );
       case 'in_progress':
         return (
-          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#35C2D1]/20 font-mono text-[10px] text-[#35C2D1]">
+          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-zinc-800 border border-zinc-700 font-mono text-[10px] text-zinc-300">
             •
           </span>
         );
       case 'locked':
         return (
-          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#243041] font-mono text-[10px] text-[#AEB8C5]/50">
+          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-zinc-950 border border-zinc-850 font-mono text-[10px] text-zinc-600">
             🔒
           </span>
         );
@@ -131,19 +131,19 @@ export function GuidedAssemblyPanel() {
     (isCurrentStageCompleted || currentStageIndex < progressSummary.completedCount);
 
   return (
-    <div className="flex h-full flex-col overflow-hidden bg-[#1C2430] text-[#E9EDF2]">
+    <div className="flex h-full flex-col overflow-hidden bg-zinc-950 text-zinc-100">
       {/* Barra de progreso global (Etapas 1..9) */}
-      <div className="border-b border-[#2D3B4E] bg-[#141A23] px-3.5 py-2.5">
+      <div className="border-b border-zinc-800/80 bg-zinc-900/60 px-3.5 py-2.5">
         <div className="mb-2 flex items-center justify-between text-xs">
-          <span className="font-mono text-[11px] uppercase tracking-wider text-[#35C2D1]">
+          <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-400 font-semibold">
             Progreso de Montaje ({progressSummary.completedCount}/9)
           </span>
-          <span className="font-mono font-semibold text-[#6DD19C]">
+          <span className="font-mono font-bold text-white">
             {progressSummary.overallProgressPercent}%
           </span>
         </div>
 
-        {/* Pasos horizontales navegables */}
+        {/* Pasos horizontales navegables Bento Pills */}
         <div className="flex items-center justify-between gap-1">
           {GUIDED_STAGES.map((stg, idx) => {
             const status = progressSummary.stageStatuses[stg.id] ?? 'locked';
@@ -157,18 +157,18 @@ export function GuidedAssemblyPanel() {
                 disabled={!isClickable}
                 onClick={() => setGuidedStageIndex(idx)}
                 title={`${stg.stepNumber}. ${stg.shortTitle} — Estado: ${status}`}
-                className={`flex h-7 flex-1 cursor-pointer items-center justify-center rounded text-[11px] font-mono transition-all ${
+                className={`flex h-7 flex-1 cursor-pointer items-center justify-center rounded-lg text-[11px] font-mono transition-all ${
                   isSelected
-                    ? 'border border-[#35C2D1] bg-[#243041] font-bold text-[#35C2D1] shadow-xs'
+                    ? 'border border-white bg-white font-bold text-black shadow-xs ring-1 ring-white/50'
                     : isClickable
-                      ? 'border border-[#2D3B4E] bg-[#1C2430] text-[#AEB8C5] hover:border-[#35C2D1]/50 hover:text-[#E9EDF2]'
-                      : 'cursor-not-allowed border border-transparent bg-[#141A23]/40 text-[#AEB8C5]/30'
+                      ? 'border border-zinc-800 bg-zinc-900 text-zinc-300 hover:border-zinc-600 hover:text-white'
+                      : 'cursor-not-allowed border border-transparent bg-zinc-950/40 text-zinc-600'
                 }`}
               >
                 {status === 'completed' ? (
-                  <span className="text-[#6DD19C]">✓</span>
+                  <span className="font-bold text-white">✓</span>
                 ) : status === 'invalidated' ? (
-                  <span className="font-bold text-[#F06A6A]">!</span>
+                  <span className="font-bold text-white">!</span>
                 ) : (
                   <span>{stg.stepNumber}</span>
                 )}
@@ -179,18 +179,18 @@ export function GuidedAssemblyPanel() {
 
         {/* Alerta si alguna etapa previa quedó invalidada */}
         {progressSummary.invalidationWarningEs && (
-          <div className="mt-2 rounded border border-[#F06A6A]/50 bg-[#2A171D] p-2 text-[11px] leading-tight text-[#F06A6A]">
+          <div className="mt-2 rounded-lg border border-zinc-600 bg-zinc-900 p-2 text-[11px] leading-tight text-white">
             <strong>Aviso de integridad:</strong> {progressSummary.invalidationWarningEs}
           </div>
         )}
       </div>
 
-      {/* Contenido principal de la etapa activa (Scrollable) */}
+      {/* Contenido principal de la etapa activa (Scrollable Bento Stack) */}
       <div className="flex-1 space-y-3.5 overflow-y-auto p-4 text-xs">
         {/* Cabecera de la etapa */}
-        <section className="space-y-1.5 rounded-lg border border-[#2D3B4E] bg-[#243041]/80 p-3">
+        <section className="space-y-1.5 rounded-xl border border-zinc-800/80 bg-zinc-900/50 p-3.5 shadow-sm">
           <div className="flex items-center justify-between gap-2">
-            <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-[#35C2D1]">
+            <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-zinc-400">
               ETAPA {currentStage.stepNumber} DE 9
             </span>
             {renderStatusBadge(
@@ -198,34 +198,34 @@ export function GuidedAssemblyPanel() {
               true,
             )}
           </div>
-          <h3 className="text-sm font-bold text-[#E9EDF2]">{currentStage.title}</h3>
-          <p className="text-[11px] text-[#AEB8C5]">{currentStage.subtitle}</p>
+          <h3 className="text-sm font-bold text-white">{currentStage.title}</h3>
+          <p className="text-[11px] text-zinc-400">{currentStage.subtitle}</p>
         </section>
 
         {/* Objetivo educativo */}
-        <section className="rounded-lg border border-[#35C2D1]/30 bg-[#141A23]/80 p-3">
-          <span className="block font-mono text-[10px] uppercase text-[#35C2D1]">
+        <section className="rounded-xl border border-zinc-800 bg-zinc-950/80 p-3.5 shadow-sm">
+          <span className="block font-mono text-[10px] uppercase text-zinc-400 font-semibold tracking-wider">
             Objetivo de Aprendizaje
           </span>
-          <p className="mt-1 leading-relaxed text-[#E9EDF2]">{currentStage.objective}</p>
+          <p className="mt-1 leading-relaxed text-zinc-200">{currentStage.objective}</p>
         </section>
 
         {/* Explicación y detalle colapsable */}
-        <section className="space-y-2 rounded-lg border border-[#2D3B4E] bg-[#243041]/50 p-3">
-          <div className="whitespace-pre-line leading-relaxed text-[#AEB8C5]">
+        <section className="space-y-2 rounded-xl border border-zinc-800/80 bg-zinc-900/50 p-3.5 shadow-sm">
+          <div className="whitespace-pre-line leading-relaxed text-zinc-300">
             {currentStage.explanationEs}
           </div>
 
           <button
             type="button"
             onClick={() => setDetailsOpen(!detailsOpen)}
-            className="cursor-pointer font-mono text-[10px] font-medium text-[#35C2D1] hover:underline"
+            className="cursor-pointer font-mono text-[10px] font-medium text-zinc-300 hover:text-white hover:underline"
           >
             {detailsOpen ? '▲ Ocultar notas técnicas' : '▼ Ver detalles de ingeniería y patillaje'}
           </button>
 
           {detailsOpen && (
-            <div className="mt-2 rounded border border-[#2D3B4E] bg-[#141A23] p-2.5 font-mono text-[10px] leading-relaxed text-[#AEB8C5]">
+            <div className="mt-2 rounded-lg border border-zinc-800 bg-zinc-950 p-2.5 font-mono text-[10px] leading-relaxed text-zinc-300">
               {currentStage.technicalDetailEs}
             </div>
           )}
@@ -233,12 +233,12 @@ export function GuidedAssemblyPanel() {
 
         {/* Actividad específica de la Etapa 1: Clasificación de continuidad */}
         {currentStageIndex === 0 && currentStage.stage1QuizPairs && (
-          <section className="space-y-2.5 rounded-lg border border-[#F1B85A]/45 bg-[#243041]/90 p-3">
+          <section className="space-y-2.5 rounded-xl border border-zinc-700 bg-zinc-900/60 p-3.5 shadow-sm">
             <div>
-              <span className="font-mono text-[10px] uppercase text-[#F1B85A]">
+              <span className="font-mono text-[10px] uppercase text-zinc-400 font-semibold">
                 Actividad Interactiva Obligatoria
               </span>
-              <h4 className="text-xs font-semibold text-[#E9EDF2]">
+              <h4 className="text-xs font-semibold text-white">
                 Clasifica la continuidad de cada par de alvéolos
               </h4>
             </div>
@@ -249,22 +249,22 @@ export function GuidedAssemblyPanel() {
                 return (
                   <div
                     key={pair.id}
-                    className="flex items-center justify-between gap-2 rounded border border-[#2D3B4E] bg-[#141A23] p-2"
+                    className="flex items-center justify-between gap-2 rounded-lg border border-zinc-800 bg-zinc-950/80 p-2"
                   >
                     <div>
-                      <span className="font-mono font-semibold text-[#E9EDF2]">
+                      <span className="font-mono font-semibold text-white">
                         {pair.labelA} y {pair.labelB}
                       </span>
                     </div>
 
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-1.5">
                       <button
                         type="button"
                         onClick={() => answerStage1Quiz(pair.id, true)}
-                        className={`cursor-pointer rounded px-2 py-1 font-mono text-[10px] transition-colors ${
+                        className={`cursor-pointer rounded-lg px-2.5 py-1 font-mono text-[10px] transition-all ${
                           answer === true
-                            ? 'bg-[#6DD19C] font-bold text-[#10141B]'
-                            : 'border border-[#2D3B4E] bg-[#243041] text-[#AEB8C5] hover:text-[#E9EDF2]'
+                            ? 'border border-white bg-white font-bold text-black shadow-xs'
+                            : 'border border-zinc-800 bg-zinc-900 text-zinc-400 hover:text-white hover:border-zinc-700'
                         }`}
                       >
                         Conectados
@@ -272,10 +272,10 @@ export function GuidedAssemblyPanel() {
                       <button
                         type="button"
                         onClick={() => answerStage1Quiz(pair.id, false)}
-                        className={`cursor-pointer rounded px-2 py-1 font-mono text-[10px] transition-colors ${
+                        className={`cursor-pointer rounded-lg px-2.5 py-1 font-mono text-[10px] transition-all ${
                           answer === false
-                            ? 'bg-[#F06A6A] font-bold text-[#10141B]'
-                            : 'border border-[#2D3B4E] bg-[#243041] text-[#AEB8C5] hover:text-[#E9EDF2]'
+                            ? 'border border-zinc-500 bg-zinc-800 font-bold text-white shadow-xs'
+                            : 'border border-zinc-800 bg-zinc-900 text-zinc-400 hover:text-white hover:border-zinc-700'
                         }`}
                       >
                         Aislados
@@ -290,12 +290,12 @@ export function GuidedAssemblyPanel() {
 
         {/* Actividad específica de la Etapa 8: Matriz de sumas en vivo */}
         {currentStageIndex === 7 && currentStage.stage8TestCases && (
-          <section className="space-y-2.5 rounded-lg border border-[#35C2D1]/45 bg-[#243041]/90 p-3">
+          <section className="space-y-2.5 rounded-xl border border-zinc-700 bg-zinc-900/60 p-3.5 shadow-sm">
             <div>
-              <span className="font-mono text-[10px] uppercase text-[#35C2D1]">
+              <span className="font-mono text-[10px] uppercase text-zinc-400 font-semibold">
                 Matriz de Pruebas Aritméticas Reales
               </span>
-              <h4 className="text-xs font-semibold text-[#E9EDF2]">
+              <h4 className="text-xs font-semibold text-white">
                 Ejecuta y verifica cada caso en tus interruptores y LEDs
               </h4>
             </div>
@@ -306,20 +306,20 @@ export function GuidedAssemblyPanel() {
                 return (
                   <div
                     key={tc.id}
-                    className="flex flex-col gap-1.5 rounded border border-[#2D3B4E] bg-[#141A23] p-2"
+                    className="flex flex-col gap-1.5 rounded-lg border border-zinc-800 bg-zinc-950/80 p-2.5"
                   >
                     <div className="flex items-center justify-between">
-                      <span className="font-mono font-bold text-[#E9EDF2]">{tc.label}</span>
+                      <span className="font-mono font-bold text-white">{tc.label}</span>
                       <span
-                        className={`font-mono text-[10px] ${
-                          isVerified ? 'text-[#6DD19C]' : 'text-[#AEB8C5]'
+                        className={`font-mono text-[10px] font-semibold ${
+                          isVerified ? 'text-white' : 'text-zinc-500'
                         }`}
                       >
                         {isVerified ? '✓ Verificado' : 'Pendiente'}
                       </span>
                     </div>
 
-                    <p className="text-[10px] text-[#AEB8C5]">{tc.hintEs}</p>
+                    <p className="text-[10px] text-zinc-400">{tc.hintEs}</p>
 
                     <button
                       type="button"
@@ -327,7 +327,7 @@ export function GuidedAssemblyPanel() {
                         setPowerSupplyOn(true);
                         applyAdditionPreset(tc.operandA, tc.operandB, tc.carryIn);
                       }}
-                      className="cursor-pointer self-start rounded border border-[#35C2D1]/40 bg-[#35C2D1]/10 px-2 py-0.5 font-mono text-[10px] text-[#35C2D1] hover:bg-[#35C2D1]/20"
+                      className="cursor-pointer self-start rounded-lg border border-zinc-700 bg-zinc-900 px-2.5 py-1 font-mono text-[10px] font-medium text-white hover:border-zinc-500 hover:bg-zinc-800"
                     >
                       Configurar interruptores para {tc.label}
                     </button>
@@ -340,12 +340,12 @@ export function GuidedAssemblyPanel() {
 
         {/* Actividad específica de la Etapa 9: Cuestionario conceptual */}
         {currentStageIndex === 8 && currentStage.stage9QuizQuestions && (
-          <section className="space-y-3 rounded-lg border border-[#6DD19C]/45 bg-[#243041]/90 p-3">
+          <section className="space-y-3 rounded-xl border border-zinc-700 bg-zinc-900/60 p-3.5 shadow-sm">
             <div>
-              <span className="font-mono text-[10px] uppercase text-[#6DD19C]">
+              <span className="font-mono text-[10px] uppercase text-zinc-400 font-semibold">
                 Evaluación Conceptual Final
               </span>
-              <h4 className="text-xs font-semibold text-[#E9EDF2]">
+              <h4 className="text-xs font-semibold text-white">
                 Responde las 5 preguntas sobre el 74LS83A
               </h4>
             </div>
@@ -356,19 +356,19 @@ export function GuidedAssemblyPanel() {
                 return (
                   <div
                     key={q.id}
-                    className="space-y-1.5 rounded border border-[#2D3B4E] bg-[#141A23] p-2.5"
+                    className="space-y-1.5 rounded-lg border border-zinc-800 bg-zinc-950/80 p-2.5"
                   >
-                    <span className="font-medium text-[#E9EDF2]">
+                    <span className="font-medium text-white">
                       {qIdx + 1}. {q.questionEs}
                     </span>
                     <div className="space-y-1">
                       {q.optionsEs.map((opt, optIdx) => (
                         <label
                           key={opt}
-                          className={`flex cursor-pointer items-start gap-2 rounded px-2 py-1 text-[11px] transition-colors ${
+                          className={`flex cursor-pointer items-start gap-2 rounded-lg px-2 py-1 text-[11px] transition-colors ${
                             chosen === optIdx
-                              ? 'bg-[#35C2D1]/20 text-[#35C2D1]'
-                              : 'text-[#AEB8C5] hover:bg-[#243041] hover:text-[#E9EDF2]'
+                              ? 'bg-zinc-800 text-white border border-zinc-650'
+                              : 'text-zinc-400 hover:bg-zinc-900 hover:text-white'
                           }`}
                         >
                           <input
@@ -376,7 +376,7 @@ export function GuidedAssemblyPanel() {
                             name={q.id}
                             checked={chosen === optIdx}
                             onChange={() => answerStage9Quiz(q.id, optIdx)}
-                            className="mt-0.5 accent-[#35C2D1]"
+                            className="mt-0.5 accent-white"
                           />
                           <span>{opt}</span>
                         </label>
@@ -388,9 +388,9 @@ export function GuidedAssemblyPanel() {
             </div>
 
             {practiceUnlocked && (
-              <div className="rounded border border-[#6DD19C]/60 bg-[#152822] p-2.5 text-[11px] leading-relaxed text-[#6DD19C]">
-                <strong>¡Tutorial completado con éxito!</strong>
-                <p className="mt-1 text-[#E9EDF2]">
+              <div className="rounded-xl border border-white bg-zinc-900 p-3 text-[11px] leading-relaxed text-white">
+                <strong className="block text-xs font-bold text-white">¡Tutorial completado con éxito!</strong>
+                <p className="mt-1 text-zinc-300">
                   Has construido el sumador binario 74LS83A desde cero y superado todas las
                   verificaciones eléctricas y conceptuales. Tu circuito permanece listo para
                   experimentar libremente.
@@ -401,14 +401,14 @@ export function GuidedAssemblyPanel() {
         )}
 
         {/* Lista de comprobación en tiempo real */}
-        <section className="space-y-2 rounded-lg border border-[#2D3B4E] bg-[#243041] p-3">
+        <section className="space-y-2 rounded-xl border border-zinc-800/80 bg-zinc-900/50 p-3.5 shadow-sm">
           <div className="flex items-center justify-between">
-            <span className="font-mono text-[10px] uppercase text-[#35C2D1]">
+            <span className="font-mono text-[10px] uppercase text-zinc-400 font-semibold">
               Comprobaciones Eléctricas en Vivo
             </span>
             <span
-              className={`font-mono text-[10px] font-semibold ${
-                stageValidation.passed ? 'text-[#6DD19C]' : 'text-[#F1B85A]'
+              className={`font-mono text-[10px] font-bold ${
+                stageValidation.passed ? 'text-white' : 'text-zinc-400'
               }`}
             >
               {stageValidation.passed ? 'Etapa Cumplida' : 'Pendiente'}
@@ -423,17 +423,17 @@ export function GuidedAssemblyPanel() {
               >
                 <span
                   className={`mt-0.5 font-mono text-[11px] font-bold ${
-                    item.passed ? 'text-[#6DD19C]' : 'text-[#AEB8C5]/50'
+                    item.passed ? 'text-white' : 'text-zinc-600'
                   }`}
                 >
                   {item.passed ? '✓' : '○'}
                 </span>
                 <div>
-                  <span className={item.passed ? 'text-[#E9EDF2]' : 'text-[#AEB8C5]'}>
+                  <span className={item.passed ? 'text-white font-medium' : 'text-zinc-400'}>
                     {item.label}
                   </span>
                   {item.feedbackEs && (
-                    <span className="block text-[10px] text-[#AEB8C5]/75">
+                    <span className="block text-[10px] text-zinc-500">
                       {item.feedbackEs}
                     </span>
                   )}
@@ -443,12 +443,12 @@ export function GuidedAssemblyPanel() {
           </ul>
 
           <div
-            className={`mt-2 rounded border px-2.5 py-1.5 text-[11px] leading-tight ${
+            className={`mt-2 rounded-lg border px-2.5 py-1.5 text-[11px] leading-tight ${
               stageValidation.severity === 'SUCCESS'
-                ? 'border-[#6DD19C]/45 bg-[#152822] text-[#6DD19C]'
+                ? 'border-zinc-500 bg-zinc-900 text-white font-medium'
                 : stageValidation.severity === 'ERROR'
-                  ? 'border-[#F06A6A]/50 bg-[#2A171D] text-[#F06A6A]'
-                  : 'border-[#35C2D1]/40 bg-[#141A23] text-[#AEB8C5]'
+                  ? 'border-zinc-600 bg-zinc-900 text-zinc-200'
+                  : 'border-zinc-800 bg-zinc-950 text-zinc-400'
             }`}
           >
             {stageValidation.statusMessageEs}
@@ -456,15 +456,15 @@ export function GuidedAssemblyPanel() {
         </section>
 
         {/* Sistema de pistas progresivas (Nivel 1, 2, 3) */}
-        <section className="space-y-2 rounded-lg border border-[#2D3B4E] bg-[#141A23] p-3">
-          <div className="flex items-center justify-between">
-            <span className="font-mono text-[10px] uppercase text-[#F1B85A]">
+        <section className="space-y-2 rounded-xl border border-zinc-800 bg-zinc-950/80 p-3.5 shadow-sm">
+          <div className="flex items-center justify-between gap-2">
+            <span className="font-mono text-[10px] uppercase text-zinc-400 font-semibold">
               Pistas Progresivas
             </span>
             <button
               type="button"
               onClick={cycleGuidedHintLevel}
-              className="cursor-pointer rounded border border-[#F1B85A]/50 bg-[#F1B85A]/15 px-2 py-0.5 font-mono text-[10px] font-semibold text-[#F1B85A] hover:bg-[#F1B85A]/25"
+              className="cursor-pointer rounded-lg border border-zinc-700 bg-zinc-900 px-2.5 py-1 font-mono text-[10px] font-semibold text-white hover:bg-zinc-800 hover:border-zinc-500"
             >
               {currentHintLevel === 0
                 ? 'Solicitar pista (Nivel 1/3)'
@@ -477,8 +477,8 @@ export function GuidedAssemblyPanel() {
           </div>
 
           {currentHintLevel >= 1 && (
-            <div className="rounded border border-[#F1B85A]/35 bg-[#243041] p-2 text-[11px] leading-relaxed text-[#E9EDF2]">
-              <strong className="block font-semibold text-[#F1B85A]">
+            <div className="rounded-lg border border-zinc-800 bg-zinc-900/70 p-2.5 text-[11px] leading-relaxed text-zinc-200">
+              <strong className="block font-semibold text-white">
                 Nivel 1 — Orientación:
               </strong>
               {currentStage.hints.level1Orientation}
@@ -486,8 +486,8 @@ export function GuidedAssemblyPanel() {
           )}
 
           {currentHintLevel >= 2 && (
-            <div className="rounded border border-[#35C2D1]/40 bg-[#243041] p-2 text-[11px] leading-relaxed text-[#E9EDF2]">
-              <strong className="block font-semibold text-[#35C2D1]">
+            <div className="rounded-lg border border-zinc-700 bg-zinc-900/80 p-2.5 text-[11px] leading-relaxed text-white">
+              <strong className="block font-semibold text-white">
                 Nivel 2 — Identificación de componentes y pines:
               </strong>
               {currentStage.hints.level2Identification}
@@ -495,12 +495,12 @@ export function GuidedAssemblyPanel() {
           )}
 
           {currentHintLevel >= 3 && (
-            <div className="rounded border border-[#6DD19C]/45 bg-[#152822] p-2 text-[11px] leading-relaxed text-[#E9EDF2]">
-              <strong className="block font-semibold text-[#6DD19C]">
+            <div className="rounded-lg border border-zinc-600 bg-zinc-900 p-2.5 text-[11px] leading-relaxed text-white">
+              <strong className="block font-semibold text-white">
                 Nivel 3 — Ayuda visual en la escena 3D:
               </strong>
               {currentStage.hints.level3Visual}
-              <p className="mt-1 font-mono text-[10px] text-[#AEB8C5]">
+              <p className="mt-1 font-mono text-[10px] text-zinc-400">
                 Los contactos relevantes han sido enfocados y marcados con anillos en la protoboard.
               </p>
             </div>
@@ -509,13 +509,13 @@ export function GuidedAssemblyPanel() {
       </div>
 
       {/* Barra de navegación inferior fija: Anterior, Comprobar, Siguiente */}
-      <footer className="border-t border-[#2D3B4E] bg-[#141A23] p-3">
+      <footer className="border-t border-zinc-800/80 bg-zinc-950 p-3">
         <div className="flex items-center justify-between gap-2">
           <button
             type="button"
             disabled={currentStageIndex === 0}
             onClick={prevGuidedStage}
-            className="flex-1 cursor-pointer rounded border border-[#2D3B4E] bg-[#243041] px-3 py-1.5 font-mono text-xs font-medium text-[#AEB8C5] transition-colors hover:border-[#35C2D1]/50 hover:text-[#E9EDF2] disabled:cursor-not-allowed disabled:opacity-40"
+            className="flex-1 cursor-pointer rounded-xl border border-zinc-800 bg-zinc-900 px-3 py-1.5 font-mono text-xs font-medium text-zinc-300 transition-colors hover:border-zinc-600 hover:text-white disabled:cursor-not-allowed disabled:opacity-40"
           >
             ◀ Anterior
           </button>
@@ -523,7 +523,7 @@ export function GuidedAssemblyPanel() {
           <button
             type="button"
             onClick={checkCurrentGuidedStage}
-            className="flex-1 cursor-pointer rounded border border-[#35C2D1]/60 bg-[#35C2D1]/20 px-3 py-1.5 font-mono text-xs font-bold text-[#35C2D1] transition-colors hover:bg-[#35C2D1]/30"
+            className="flex-1 cursor-pointer rounded-xl border border-zinc-700 bg-zinc-800 px-3 py-1.5 font-mono text-xs font-semibold text-white transition-colors hover:bg-zinc-700 hover:border-zinc-500"
           >
             Comprobar
           </button>
@@ -537,10 +537,10 @@ export function GuidedAssemblyPanel() {
                 ? 'Avanzar a la siguiente etapa'
                 : 'Debes completar y comprobar los requisitos de esta etapa para avanzar'
             }
-            className={`flex-1 rounded px-3 py-1.5 font-mono text-xs font-bold transition-colors ${
+            className={`flex-1 rounded-xl px-3 py-1.5 font-mono text-xs font-bold transition-all ${
               canGoNext
-                ? 'cursor-pointer border border-[#6DD19C]/60 bg-[#6DD19C]/20 text-[#6DD19C] hover:bg-[#6DD19C]/30'
-                : 'cursor-not-allowed border border-[#2D3B4E] bg-[#1C2430] text-[#AEB8C5]/40'
+                ? 'cursor-pointer border border-white bg-white text-black shadow-xs hover:bg-zinc-200'
+                : 'cursor-not-allowed border border-zinc-900 bg-zinc-950 text-zinc-600'
             }`}
           >
             Siguiente ▶
@@ -548,39 +548,39 @@ export function GuidedAssemblyPanel() {
         </div>
 
         {/* Reiniciar tutorial completo */}
-        <div className="mt-2 flex items-center justify-between text-[10px]">
+        <div className="mt-2.5 flex items-center justify-between text-[10px]">
           {!resetConfirmOpen ? (
             <button
               type="button"
               onClick={() => setResetConfirmOpen(true)}
-              className="cursor-pointer font-mono text-[#AEB8C5] hover:text-[#F06A6A]"
+              className="cursor-pointer font-mono text-zinc-400 hover:text-white"
             >
               Reiniciar tutorial de montaje
             </button>
           ) : (
             <div className="flex items-center gap-1 font-mono">
-              <span className="text-[#F06A6A]">¿Reiniciar desde Etapa 1?</span>
+              <span className="text-white">¿Reiniciar desde Etapa 1?</span>
               <button
                 type="button"
                 onClick={() => {
                   resetGuidedTutorial();
                   setResetConfirmOpen(false);
                 }}
-                className="cursor-pointer font-bold text-[#F06A6A] underline"
+                className="cursor-pointer font-bold text-white underline ml-1"
               >
                 Sí
               </button>
               <button
                 type="button"
                 onClick={() => setResetConfirmOpen(false)}
-                className="cursor-pointer text-[#AEB8C5]"
+                className="cursor-pointer text-zinc-400 hover:text-white ml-1"
               >
                 Cancelar
               </button>
             </div>
           )}
 
-          <span className="font-mono text-[#AEB8C5]">74LS83 Lab v1</span>
+          <span className="font-mono text-zinc-500">74LS83 Lab v1</span>
         </div>
       </footer>
     </div>

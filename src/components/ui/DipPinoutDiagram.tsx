@@ -11,17 +11,17 @@ const BOTTOM_ROW_PINS: readonly PinNumber[] = [1, 2, 3, 4, 5, 6, 7, 8];
 function roleBadgeStyle(role: PinRole): string {
   switch (role) {
     case 'POWER':
-      return 'text-[#F06A6A]';
+      return 'text-white font-extrabold';
     case 'GROUND':
-      return 'text-[#7AA7E8]';
+      return 'text-zinc-300 font-semibold';
     case 'SUM_OUT':
     case 'CARRY_OUT':
-      return 'text-[#6DD19C]';
+      return 'text-white font-bold';
     case 'CARRY_IN':
-      return 'text-[#F1B85A]';
+      return 'text-zinc-200 font-semibold';
     case 'INPUT_A':
     case 'INPUT_B':
-      return 'text-[#E9EDF2]';
+      return 'text-zinc-300 font-medium';
   }
 }
 
@@ -73,31 +73,31 @@ export function DipPinoutDiagram() {
             ? `Pin ${pinNumber}: ${spec.signal} (${spec.shortLabel}) — Nodo ${mounted.holeId}`
             : `Pin ${pinNumber}: ${spec.signal} (${spec.shortLabel}) — Inserta primero el 74LS83A`
         }
-        className={`group flex flex-col items-center rounded border px-1 py-1 font-mono transition-colors ${
+        className={`group flex flex-col items-center rounded-lg border px-1 py-1 font-mono transition-all ${
           !chip
-            ? 'cursor-default border-[#253142] bg-[#141A23]/60 opacity-75'
+            ? 'cursor-default border-zinc-900 bg-zinc-950/60 opacity-60'
             : isSelected
-              ? 'cursor-pointer border-[#F1B85A] bg-[#F1B85A]/15'
+              ? 'cursor-pointer border-white bg-white text-black font-bold ring-2 ring-white/50 shadow-xs'
               : isHovered
-                ? 'cursor-pointer border-[#35C2D1] bg-[#35C2D1]/15'
-                : 'cursor-pointer border-[#2D3B4E] bg-[#141A23] hover:border-[#35C2D1]/50'
+                ? 'cursor-pointer border-zinc-500 bg-zinc-800 text-white'
+                : 'cursor-pointer border-zinc-800 bg-zinc-950 text-zinc-300 hover:border-zinc-600 hover:text-white'
         }`}
       >
         {position === 'top' ? (
           <>
-            <span className="text-[9px] text-[#AEB8C5]">{holeLabel}</span>
-            <span className={`text-[11px] font-bold ${roleBadgeStyle(spec.role)}`}>
+            <span className={`text-[9px] ${isSelected ? 'text-zinc-700' : 'text-zinc-500'}`}>{holeLabel}</span>
+            <span className={`text-[11px] font-bold ${isSelected ? 'text-black' : roleBadgeStyle(spec.role)}`}>
               {spec.signal}
             </span>
-            <span className="text-[9px] text-[#AEB8C5]">P{pinNumber}</span>
+            <span className={`text-[9px] ${isSelected ? 'text-zinc-700' : 'text-zinc-500'}`}>P{pinNumber}</span>
           </>
         ) : (
           <>
-            <span className="text-[9px] text-[#AEB8C5]">P{pinNumber}</span>
-            <span className={`text-[11px] font-bold ${roleBadgeStyle(spec.role)}`}>
+            <span className={`text-[9px] ${isSelected ? 'text-zinc-700' : 'text-zinc-500'}`}>P{pinNumber}</span>
+            <span className={`text-[11px] font-bold ${isSelected ? 'text-black' : roleBadgeStyle(spec.role)}`}>
               {spec.signal}
             </span>
-            <span className="text-[9px] text-[#AEB8C5]">{holeLabel}</span>
+            <span className={`text-[9px] ${isSelected ? 'text-zinc-700' : 'text-zinc-500'}`}>{holeLabel}</span>
           </>
         )}
       </button>
@@ -105,16 +105,16 @@ export function DipPinoutDiagram() {
   };
 
   return (
-    <div className="rounded-lg border border-[#2D3B4E] bg-[#243041]/65 p-2.5">
+    <div className="rounded-xl border border-zinc-800/80 bg-zinc-900/50 p-3 shadow-sm">
       <div className="mb-2 flex items-center justify-between">
-        <span className="text-[11px] font-semibold uppercase tracking-wider text-[#AEB8C5]">
+        <span className="text-[10px] font-mono font-semibold uppercase tracking-wider text-zinc-400">
           Mapa DIP-16 (Vista superior)
         </span>
         {chip ? (
           <button
             type="button"
             onClick={() => setSelection({ kind: 'chip' })}
-            className="cursor-pointer font-mono text-[10px] text-[#35C2D1] hover:underline"
+            className="cursor-pointer font-mono text-[10px] text-zinc-300 hover:text-white hover:underline"
           >
             Ver encapsulado
           </button>
@@ -123,7 +123,7 @@ export function DipPinoutDiagram() {
             <button
               type="button"
               onClick={() => setActiveKitItem('ic-74ls83a')}
-              className="cursor-pointer rounded border border-[#35C2D1]/55 bg-[#35C2D1]/15 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-[#35C2D1] hover:bg-[#35C2D1]/25"
+              className="cursor-pointer rounded-lg border border-zinc-600 bg-zinc-800 px-2 py-0.5 font-mono text-[10px] font-semibold text-white hover:bg-zinc-700"
             >
               Colocar 74LS83A
             </button>
@@ -137,19 +137,19 @@ export function DipPinoutDiagram() {
       </div>
 
       {/* Cuerpo esquemático central con muesca izquierda y marca Pin 1 */}
-      <div className="relative my-1.5 flex h-9 items-center justify-between rounded border border-[#2D3B4E] bg-[#141A23] px-3">
+      <div className="relative my-2 flex h-9 items-center justify-between rounded-lg border border-zinc-700/80 bg-zinc-950 px-3">
         <div
           aria-hidden="true"
-          className="absolute -left-px top-1/2 h-4 w-2 -translate-y-1/2 rounded-r-full border border-l-0 border-[#3D5068] bg-[#1C2430]"
+          className="absolute -left-px top-1/2 h-4 w-2 -translate-y-1/2 rounded-r-full border border-l-0 border-zinc-600 bg-zinc-900"
         />
         <div className="flex items-center gap-1.5 pl-1">
-          <span className="h-2 w-2 rounded-full bg-[#F1B85A]" title="Indicador Pin 1" />
-          <span className="font-mono text-[10px] text-[#AEB8C5]">Muesca Izq.</span>
+          <span className="h-2 w-2 rounded-full bg-white shadow-[0_0_6px_rgba(255,255,255,0.8)]" title="Indicador Pin 1" />
+          <span className="font-mono text-[10px] text-zinc-400">Muesca Izq.</span>
         </div>
-        <span className="font-mono text-xs font-bold tracking-wider text-[#E9EDF2]">
+        <span className="font-mono text-xs font-bold tracking-wider text-white">
           SN74LS83AN
         </span>
-        <span className="font-mono text-[10px] text-[#AEB8C5]">
+        <span className="font-mono text-[10px] text-zinc-400">
           {chip ? `Col ${chip.startColumn}–${chip.startColumn + 7}` : 'Sin insertar'}
         </span>
       </div>

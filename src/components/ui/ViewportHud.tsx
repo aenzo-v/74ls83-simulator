@@ -122,26 +122,26 @@ export function ViewportHud() {
   }
 
   return (
-    <div className="pointer-events-none absolute inset-0 flex flex-col justify-between p-3">
+    <div className="pointer-events-none absolute inset-0 flex flex-col justify-between p-3.5">
       {/* Fila superior: lectura técnica, ruta eléctrica resaltada y avisos de operación */}
       <div className="flex flex-wrap items-start justify-between gap-2">
-        <div className="flex max-w-2xl flex-col items-start gap-1.5">
+        <div className="flex max-w-2xl flex-col items-start gap-2">
           <div
-            className={`pointer-events-auto inline-flex items-center gap-2 rounded-md border px-2.5 py-1 text-xs backdrop-blur-md ${
+            className={`pointer-events-auto inline-flex items-center gap-2 rounded-xl border px-3 py-1.5 text-xs shadow-lg backdrop-blur-md transition-all ${
               badgeTone === 'hover'
-                ? 'border-[#35C2D1]/50 bg-[#1C2430]/90 text-[#E9EDF2]'
+                ? 'border-white/40 bg-zinc-950/90 text-white ring-1 ring-white/20'
                 : badgeTone === 'selected'
-                  ? 'border-[#F1B85A]/45 bg-[#1C2430]/90 text-[#E9EDF2]'
-                  : 'border-[#2D3B4E] bg-[#1C2430]/80 text-[#AEB8C5]'
+                  ? 'border-zinc-500 bg-zinc-950/90 text-white'
+                  : 'border-zinc-800 bg-zinc-950/80 text-zinc-400'
             }`}
           >
             <span
               className={`h-2 w-2 shrink-0 rounded-full ${
                 badgeTone === 'hover'
-                  ? 'bg-[#35C2D1]'
+                  ? 'bg-white shadow-[0_0_8px_rgba(255,255,255,0.8)]'
                   : badgeTone === 'selected'
-                    ? 'bg-[#F1B85A]'
-                    : 'bg-[#AEB8C5]/60'
+                    ? 'bg-zinc-200'
+                    : 'bg-zinc-600'
               }`}
             />
             <span className="font-mono text-[11px]">{readoutText}</span>
@@ -149,19 +149,19 @@ export function ViewportHud() {
 
           {/* Cinta informativa cuando se está trazando el recorrido de una señal */}
           {signalTrace && (
-            <div className="pointer-events-auto flex flex-wrap items-center gap-2.5 rounded-md border border-[#35C2D1]/55 bg-[#141A23]/92 px-3 py-1.5 text-xs text-[#E9EDF2] shadow-md backdrop-blur-md">
-              <span className="h-2 w-2 shrink-0 rounded-full bg-[#35C2D1] shadow-[0_0_6px_#35C2D1]" />
+            <div className="pointer-events-auto flex flex-wrap items-center gap-2.5 rounded-xl border border-zinc-700/80 bg-zinc-950/92 px-3.5 py-2 text-xs text-zinc-100 shadow-xl backdrop-blur-md">
+              <span className="h-2 w-2 shrink-0 rounded-full bg-white shadow-[0_0_6px_rgba(255,255,255,0.8)]" />
               <div className="min-w-0">
-                <div className="font-mono text-[11px] font-semibold text-[#35C2D1]">
+                <div className="font-mono text-[11px] font-semibold text-white">
                   Recorrido eléctrico activo: {signalTrace.signal} (Pin {signalTrace.pinNumber}) ·{' '}
                   {signalTrace.wireIds.size} cable(s) · {signalTrace.stripIds.size} pista(s)
                 </div>
-                <p className="text-[11px] text-[#AEB8C5]">{signalTrace.summaryEs}</p>
+                <p className="text-[11px] text-zinc-400">{signalTrace.summaryEs}</p>
               </div>
               <button
                 type="button"
                 onClick={() => setTracedSignal(null)}
-                className="cursor-pointer rounded border border-[#2D3B4E] bg-[#243041] px-2 py-0.5 font-mono text-[10px] font-medium text-[#E9EDF2] transition-colors hover:border-[#35C2D1] hover:text-[#35C2D1]"
+                className="cursor-pointer rounded-lg border border-zinc-700 bg-zinc-800 px-2.5 py-1 font-mono text-[10px] font-medium text-white transition-colors hover:bg-zinc-700 hover:border-zinc-500"
               >
                 Quitar resaltado
               </button>
@@ -173,26 +173,26 @@ export function ViewportHud() {
         {(!solution.isPowerSupplyOn || firstError) && (
           <div
             role="status"
-            className={`pointer-events-auto flex max-w-sm items-center gap-2.5 rounded-md border px-3 py-1.5 text-xs shadow-md backdrop-blur-md ${
+            className={`pointer-events-auto flex max-w-sm items-center gap-2.5 rounded-xl border px-3.5 py-2 text-xs shadow-xl backdrop-blur-md ${
               firstError
-                ? 'border-[#F06A6A]/55 bg-[#1C1418]/92 text-[#E9EDF2]'
-                : 'border-[#F1B85A]/55 bg-[#1C2026]/92 text-[#E9EDF2]'
+                ? 'border-zinc-500 bg-zinc-950/95 text-white'
+                : 'border-zinc-700 bg-zinc-950/95 text-zinc-200'
             }`}
           >
             <span
               className={`h-2 w-2 shrink-0 rounded-full ${
-                firstError ? 'bg-[#F06A6A]' : 'bg-[#F1B85A]'
+                firstError ? 'bg-white shadow-[0_0_6px_rgba(255,255,255,0.8)]' : 'border border-zinc-400 bg-transparent'
               }`}
             />
             <div className="min-w-0">
               <div
                 className={`font-mono text-[11px] font-semibold ${
-                  firstError ? 'text-[#F06A6A]' : 'text-[#F1B85A]'
+                  firstError ? 'text-white' : 'text-zinc-200'
                 }`}
               >
                 {firstError ? firstError.title : 'Fuente regulada +5.0 V en espera (STBY)'}
               </div>
-              <p className="text-[11px] text-[#AEB8C5]">
+              <p className="text-[11px] text-zinc-400">
                 {firstError
                   ? firstError.message
                   : 'El 74LS83A no tiene VCC en Pin 5; sus salidas y LEDs permanecen apagados.'}
@@ -202,7 +202,7 @@ export function ViewportHud() {
               <button
                 type="button"
                 onClick={() => setPowerSupplyOn(true)}
-                className="shrink-0 cursor-pointer rounded border border-[#6DD19C]/55 bg-[#6DD19C]/15 px-2 py-1 font-mono text-[10px] font-semibold text-[#6DD19C] hover:bg-[#6DD19C]/25"
+                className="shrink-0 cursor-pointer rounded-lg border border-white bg-white px-3 py-1 font-mono text-[10px] font-bold text-black hover:bg-zinc-200"
               >
                 Activar +5 V
               </button>
@@ -216,7 +216,7 @@ export function ViewportHud() {
         <div
           role="toolbar"
           aria-label="Vistas de cámara"
-          className="pointer-events-auto flex items-center gap-1 rounded-lg border border-[#2D3B4E] bg-[#1C2430]/90 p-1 shadow-md backdrop-blur-md"
+          className="pointer-events-auto flex items-center gap-1 rounded-xl border border-zinc-800/80 bg-zinc-950/90 p-1 shadow-lg backdrop-blur-md"
         >
           {CAMERA_BUTTONS.map(({ preset, label }) => {
             const active = cameraPreset === preset;
@@ -225,28 +225,28 @@ export function ViewportHud() {
                 key={preset}
                 type="button"
                 onClick={() => requestCameraPreset(preset)}
-                className={`cursor-pointer rounded px-2.5 py-1 text-[11px] font-medium transition-colors ${
+                className={`cursor-pointer rounded-lg px-3 py-1 text-[11px] font-medium transition-all ${
                   active
-                    ? 'bg-[#243041] text-[#35C2D1] ring-1 ring-[#35C2D1]/40'
-                    : 'text-[#AEB8C5] hover:bg-[#243041]/60 hover:text-[#E9EDF2]'
+                    ? 'bg-white text-black font-semibold shadow-xs ring-1 ring-white/50'
+                    : 'text-zinc-400 hover:bg-zinc-800 hover:text-white'
                 }`}
               >
                 {label}
               </button>
             );
           })}
-          <div className="mx-0.5 h-4 w-px bg-[#2D3B4E]" />
+          <div className="mx-0.5 h-4 w-px bg-zinc-800" />
           <button
             type="button"
             onClick={resetCamera}
-            className="cursor-pointer rounded px-2 py-1 text-[11px] font-medium text-[#AEB8C5] transition-colors hover:bg-[#243041]/60 hover:text-[#E9EDF2]"
+            className="cursor-pointer rounded-lg px-2.5 py-1 text-[11px] font-medium text-zinc-400 transition-colors hover:bg-zinc-800 hover:text-white"
             title="Volver al encuadre inicial de laboratorio"
           >
             Encuadrar
           </button>
         </div>
 
-        <div className="hidden rounded-md border border-[#2D3B4E]/80 bg-[#1C2430]/80 px-2.5 py-1 text-[11px] text-[#AEB8C5] backdrop-blur-md sm:block">
+        <div className="hidden rounded-xl border border-zinc-800/80 bg-zinc-950/85 px-3 py-1.5 text-[11px] font-mono text-zinc-400 backdrop-blur-md shadow-md sm:block">
           Arrastrar: orbitar · Rueda: zoom · Clic derecho: desplazar
         </div>
       </div>

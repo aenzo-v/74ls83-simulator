@@ -48,46 +48,46 @@ export function TopBar() {
   const firstError = solution.diagnostics.find((d) => d.severity === 'ERROR');
   const firstWarning = solution.diagnostics.find((d) => d.severity === 'WARNING');
 
-  let statusBorder = 'border-[#6DD19C]/35';
-  let statusDot = 'bg-[#6DD19C]';
-  let statusTextClass = 'text-[#6DD19C]';
+  let statusBorder = 'border-zinc-700 bg-zinc-900/80';
+  let statusDot = 'bg-white shadow-[0_0_8px_rgba(255,255,255,0.7)]';
+  let statusTextClass = 'text-white';
   let statusPrimary = 'Motor activo';
   let statusSecondary = '· +5.0 V OK';
   let statusTitle = 'Netlist verificada sin errores eléctricos ni entradas flotantes.';
 
   if (firstError) {
-    statusBorder = 'border-[#F06A6A]/45';
-    statusDot = 'bg-[#F06A6A]';
-    statusTextClass = 'text-[#F06A6A]';
+    statusBorder = 'border-zinc-500 bg-zinc-900/90';
+    statusDot = 'bg-white';
+    statusTextClass = 'text-white';
     statusPrimary = 'Fallo eléctrico';
     statusSecondary = `· ${firstError.code}`;
     statusTitle = `${firstError.title}: ${firstError.message}`;
   } else if (!solution.isPowerSupplyOn) {
-    statusBorder = 'border-[#F1B85A]/35';
-    statusDot = 'bg-[#F1B85A]';
-    statusTextClass = 'text-[#F1B85A]';
+    statusBorder = 'border-zinc-800 bg-zinc-900/60';
+    statusDot = 'border-2 border-zinc-400 bg-transparent';
+    statusTextClass = 'text-zinc-400';
     statusPrimary = 'Sin alimentar';
     statusSecondary = '· Fuente en STBY';
     statusTitle = firstWarning?.message ?? 'Fuente regulada de +5.0 V en modo espera (STBY).';
   } else if (firstWarning) {
-    statusBorder = 'border-[#F1B85A]/35';
-    statusDot = 'bg-[#F1B85A]';
-    statusTextClass = 'text-[#F1B85A]';
+    statusBorder = 'border-zinc-700 bg-zinc-900/80';
+    statusDot = 'bg-zinc-300';
+    statusTextClass = 'text-zinc-200';
     statusPrimary = 'Aviso de red';
     statusSecondary = `· ${solution.diagnostics.length}`;
     statusTitle = `${firstWarning.title}: ${firstWarning.message}`;
   }
 
   return (
-    <header className="flex shrink-0 flex-col border-b border-[#2D3B4E] bg-[#1C2430] text-[#E9EDF2]">
+    <header className="flex shrink-0 flex-col rounded-2xl border border-zinc-800/80 bg-zinc-950/90 text-zinc-100 shadow-sm backdrop-blur-md">
       {/* ============================================================ */}
       {/* FILA 1: Identidad Institucional, Proyecto, Curso y Docente   */}
       {/* ============================================================ */}
-      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1.5 border-b border-[#232E3D] px-3 py-1.5 sm:px-4">
+      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-zinc-800/80 px-3.5 py-2 sm:px-4">
         {/* Identidad Institucional y Proyecto */}
-        <div className="flex min-w-0 items-center gap-2.5">
+        <div className="flex min-w-0 items-center gap-3">
           {/* Escudo oficial UNASAM */}
-          <div className="flex h-9 w-8 shrink-0 items-center justify-center rounded-md border border-[#2D3B4E] bg-[#141A23] p-0.5 shadow-xs">
+          <div className="flex h-9 w-8 shrink-0 items-center justify-center rounded-lg border border-zinc-700/80 bg-zinc-900 p-0.5 shadow-xs">
             <img
               src={ACADEMIC_INFO.university.logoUrl}
               alt={ACADEMIC_INFO.university.logoAlt}
@@ -99,7 +99,7 @@ export function TopBar() {
 
           {/* Insignia 83A */}
           <div
-            className="hidden h-7 w-7 shrink-0 items-center justify-center rounded border border-[#35C2D1]/40 bg-[#243041] font-mono text-[11px] font-bold text-[#35C2D1] sm:flex"
+            className="hidden h-7 w-7 shrink-0 items-center justify-center rounded-md border border-zinc-700 bg-zinc-800 font-mono text-[11px] font-bold text-white sm:flex"
             title="Circuito integrado 74LS83A (DIP-16)"
           >
             83A
@@ -108,46 +108,46 @@ export function TopBar() {
           {/* Textos del proyecto y facultad */}
           <div className="min-w-0 leading-tight">
             <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-              <h1 className="text-sm font-bold tracking-tight text-[#E9EDF2]">
+              <h1 className="text-sm font-bold tracking-tight text-white">
                 {ACADEMIC_INFO.shortTitle}
               </h1>
-              <span className="rounded border border-[#2D3B4E] bg-[#243041] px-1.5 py-0.2 font-mono text-[10px] text-[#AEB8C5]">
+              <span className="rounded-md border border-zinc-800 bg-zinc-900 px-1.5 py-0.5 font-mono text-[10px] text-zinc-300">
                 {ACADEMIC_INFO.chipModel}
               </span>
-              <span className="rounded border border-[#35C2D1]/40 bg-[#141A23] px-1.5 py-0.2 font-mono text-[10px] font-bold text-[#35C2D1]">
+              <span className="rounded-md border border-zinc-700 bg-zinc-800 px-1.5 py-0.5 font-mono text-[10px] font-bold text-white">
                 {ACADEMIC_INFO.university.shortName}
               </span>
             </div>
-            <p className="mt-0.5 text-[11px] text-[#AEB8C5]">
-              <span className="font-medium text-[#E9EDF2]/90">
+            <p className="mt-0.5 text-[11px] text-zinc-400">
+              <span className="font-medium text-zinc-200">
                 {ACADEMIC_INFO.projectSubtitle}
               </span>
-              <span className="mx-1.5 text-[#2D3B4E]">·</span>
-              <span className="text-[#AEB8C5]">
+              <span className="mx-1.5 text-zinc-600">·</span>
+              <span className="text-zinc-400">
                 {ACADEMIC_INFO.faculty} · {ACADEMIC_INFO.career}
               </span>
             </p>
           </div>
         </div>
 
-        {/* Cátedra: Asignatura y Docente titular */}
+        {/* Cátedra: Asignatura y Docente titular (Bento Cards) */}
         <div className="flex flex-wrap items-center gap-2 text-xs">
           {/* Curso */}
-          <div className="flex items-center gap-1.5 rounded-md border border-[#2D3B4E] bg-[#141A23] px-2.5 py-1">
-            <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-[#35C2D1]">
+          <div className="flex items-center gap-1.5 rounded-xl border border-zinc-800 bg-zinc-900/60 px-3 py-1.5">
+            <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-zinc-400">
               Curso:
             </span>
-            <span className="font-semibold text-[#E9EDF2]">
+            <span className="font-semibold text-white">
               {ACADEMIC_INFO.course}
             </span>
           </div>
 
           {/* Docente */}
-          <div className="flex items-center gap-1.5 rounded-md border border-[#2D3B4E] bg-[#141A23] px-2.5 py-1">
-            <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-[#F1B85A]">
+          <div className="flex items-center gap-1.5 rounded-xl border border-zinc-800 bg-zinc-900/60 px-3 py-1.5">
+            <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-zinc-400">
               Docente:
             </span>
-            <span className="font-mono text-xs font-semibold tracking-wide text-[#E9EDF2]">
+            <span className="font-mono text-xs font-semibold tracking-wide text-white">
               {ACADEMIC_INFO.instructor}
             </span>
           </div>
@@ -157,12 +157,12 @@ export function TopBar() {
       {/* ============================================================ */}
       {/* FILA 2: Integrantes del Equipo + Controles del Simulador     */}
       {/* ============================================================ */}
-      <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 bg-[#141A23]/70 px-3 py-1.5 sm:px-4">
+      <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 bg-zinc-950/40 px-3.5 py-2 sm:px-4">
         {/* Integrantes del equipo (todos visibles directamente) */}
         <div className="flex min-w-0 flex-wrap items-center gap-2">
-          <div className="flex shrink-0 items-center gap-1.5 font-mono text-[10.5px] font-semibold text-[#6DD19C]">
+          <div className="flex shrink-0 items-center gap-1.5 font-mono text-[10.5px] font-semibold text-zinc-300">
             <svg
-              className="h-3.5 w-3.5"
+              className="h-3.5 w-3.5 text-zinc-400"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -182,12 +182,12 @@ export function TopBar() {
             {ACADEMIC_INFO.teamMembers.map((member) => (
               <div
                 key={member.id}
-                className="flex items-center gap-1.5 rounded-md border border-[#2D3B4E] bg-[#1C2430] px-2 py-0.5 text-xs transition-colors hover:border-[#35C2D1]/40"
+                className="flex items-center gap-1.5 rounded-lg border border-zinc-800 bg-zinc-900/70 px-2.5 py-1 text-xs transition-colors hover:border-zinc-600 hover:text-white"
               >
-                <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[#243041] font-mono text-[9px] font-bold text-[#35C2D1]">
+                <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-zinc-700 bg-zinc-800 font-mono text-[9px] font-bold text-white">
                   {member.id}
                 </span>
-                <span className="font-medium text-[#E9EDF2] whitespace-nowrap text-[11px] sm:text-xs">
+                <span className="font-medium text-zinc-200 whitespace-nowrap text-[11px] sm:text-xs">
                   {member.name}
                 </span>
               </div>
@@ -197,11 +197,11 @@ export function TopBar() {
 
         {/* Controles del Simulador (Modo y Utilidades) */}
         <div className="flex flex-wrap items-center gap-2">
-          {/* Selector de modo */}
+          {/* Selector de modo Bento pill */}
           <div className="relative">
             <nav
               aria-label="Modo del simulador"
-              className="flex items-center rounded-lg border border-[#2D3B4E] bg-[#10141B] p-0.5"
+              className="flex items-center rounded-xl border border-zinc-800 bg-zinc-900/80 p-0.5"
             >
               <button
                 type="button"
@@ -212,10 +212,10 @@ export function TopBar() {
                     ? 'Modo Circuito montado'
                     : 'Circuito montado'
                 }
-                className={`cursor-pointer rounded-md px-2.5 py-1 text-xs font-medium transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-[#35C2D1] sm:px-3 ${
+                className={`cursor-pointer rounded-lg px-3 py-1 text-xs font-medium transition-all focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-white sm:px-3.5 ${
                   mode === 'mounted'
-                    ? 'bg-[#243041] text-[#35C2D1] shadow-xs ring-1 ring-[#35C2D1]/40'
-                    : 'text-[#AEB8C5] hover:text-[#E9EDF2]'
+                    ? 'bg-white text-black font-semibold shadow-xs ring-1 ring-white/50'
+                    : 'text-zinc-400 hover:text-white'
                 }`}
               >
                 Circuito montado
@@ -225,10 +225,10 @@ export function TopBar() {
                   type="button"
                   onClick={() => setMode('guided')}
                   aria-current={mode === 'guided' ? 'page' : undefined}
-                  className={`cursor-pointer rounded-md px-2.5 py-1 text-xs font-medium transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-[#35C2D1] sm:px-3 ${
+                  className={`cursor-pointer rounded-lg px-3 py-1 text-xs font-medium transition-all focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-white sm:px-3.5 ${
                     mode === 'guided'
-                      ? 'bg-[#243041] text-[#35C2D1] shadow-xs ring-1 ring-[#35C2D1]/40'
-                      : 'text-[#AEB8C5] hover:text-[#E9EDF2]'
+                      ? 'bg-white text-black font-semibold shadow-xs ring-1 ring-white/50'
+                      : 'text-zinc-400 hover:text-white'
                   }`}
                 >
                   Montaje guiado
@@ -240,7 +240,7 @@ export function TopBar() {
               <div
                 role="status"
                 aria-live="polite"
-                className="pointer-events-none absolute top-full left-1/2 z-50 mt-2 -translate-x-1/2 whitespace-nowrap rounded-md border border-[#35C2D1]/50 bg-[#141A23] px-2.5 py-1 text-[11px] font-medium text-[#35C2D1] shadow-lg shadow-black/40"
+                className="pointer-events-none absolute top-full left-1/2 z-50 mt-2 -translate-x-1/2 whitespace-nowrap rounded-lg border border-zinc-600 bg-zinc-900 px-3 py-1 text-[11px] font-medium text-white shadow-xl shadow-black/60"
               >
                 {unlockFeedback}
               </div>
@@ -253,18 +253,18 @@ export function TopBar() {
             aria-pressed={solution.isPowerSupplyOn}
             onClick={togglePowerSupply}
             title={`${statusTitle} (Haz clic para encender o apagar la fuente +5.0 V)`}
-            className={`hidden cursor-pointer items-center gap-2 rounded-md border ${statusBorder} bg-[#243041]/85 px-2.5 py-1 text-[11px] text-[#E9EDF2] transition-colors hover:bg-[#2A384C] xl:flex`}
+            className={`hidden cursor-pointer items-center gap-2 rounded-xl border ${statusBorder} px-3 py-1 text-[11px] text-zinc-100 transition-colors hover:border-zinc-500 xl:flex`}
           >
             <span className={`h-2 w-2 rounded-full ${statusDot}`} />
             <span className={`font-medium ${statusTextClass}`}>{statusPrimary}</span>
-            <span className="font-mono text-[#AEB8C5]">{statusSecondary}</span>
+            <span className="font-mono text-zinc-400">{statusSecondary}</span>
           </button>
 
           {/* Restablecer vista */}
           <button
             type="button"
             onClick={resetCamera}
-            className="cursor-pointer rounded-md border border-[#2D3B4E] bg-[#243041] px-2 py-1 text-xs font-medium text-[#E9EDF2] transition-colors hover:border-[#35C2D1]/50 hover:text-[#35C2D1] sm:px-2.5"
+            className="cursor-pointer rounded-xl border border-zinc-800 bg-zinc-900/80 px-2.5 py-1 text-xs font-medium text-zinc-200 transition-colors hover:border-zinc-600 hover:text-white sm:px-3"
           >
             <span className="hidden md:inline">Restablecer vista</span>
             <span className="md:hidden">Vista</span>
@@ -274,7 +274,7 @@ export function TopBar() {
           <button
             type="button"
             onClick={() => setHelpModalOpen(true)}
-            className="cursor-pointer rounded-md border border-[#2D3B4E] bg-[#243041] px-2 py-1 text-xs font-medium text-[#E9EDF2] transition-colors hover:border-[#35C2D1]/50 hover:text-[#35C2D1] sm:px-2.5"
+            className="cursor-pointer rounded-xl border border-zinc-800 bg-zinc-900/80 px-2.5 py-1 text-xs font-medium text-zinc-200 transition-colors hover:border-zinc-600 hover:text-white sm:px-3"
           >
             <span className="hidden md:inline">Pinout / Ayuda</span>
             <span className="md:hidden">Pinout</span>
@@ -285,10 +285,10 @@ export function TopBar() {
             type="button"
             onClick={toggleSidebar}
             aria-expanded={isSidebarOpen}
-            className={`cursor-pointer rounded-md border px-2 py-1 text-xs font-medium transition-colors sm:px-2.5 ${
+            className={`cursor-pointer rounded-xl border px-2.5 py-1 text-xs font-medium transition-colors sm:px-3 ${
               isSidebarOpen
-                ? 'border-[#35C2D1]/45 bg-[#243041] text-[#35C2D1]'
-                : 'border-[#2D3B4E] bg-[#141A23] text-[#AEB8C5] hover:text-[#E9EDF2]'
+                ? 'border-white/60 bg-white text-black font-semibold shadow-xs'
+                : 'border-zinc-800 bg-zinc-900/80 text-zinc-400 hover:text-white hover:border-zinc-600'
             }`}
           >
             Inspector

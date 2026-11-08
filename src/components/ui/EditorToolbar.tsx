@@ -114,23 +114,23 @@ export function EditorToolbar() {
   return (
     <section
       aria-label="Herramientas de montaje y cableado 3D"
-      className="shrink-0 border-b border-[#2D3B4E] bg-[#171E28] px-3 py-1.5"
+      className="shrink-0 rounded-2xl border border-zinc-800/80 bg-zinc-950/90 px-3.5 py-2 shadow-sm backdrop-blur-md"
     >
       {/* Fila principal: Herramientas, Historial, Reinicio y Estado contextual */}
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <div className="flex flex-wrap items-center gap-1.5">
+        <div className="flex flex-wrap items-center gap-2">
           {/* Grupo de 4 herramientas interactivas */}
           <div
             role="toolbar"
             aria-label="Herramienta activa"
-            className="flex items-center gap-1 rounded-md border border-[#2D3B4E] bg-[#10141B] p-0.5"
+            className="flex items-center gap-1 rounded-xl border border-zinc-800 bg-zinc-900/80 p-0.5"
           >
             {TOOL_BUTTONS.map((tool) => {
               const isActive = activeTool === tool.id;
               const activeStyles =
                 tool.id === 'remove'
-                  ? 'bg-[#361B22] text-[#F06A6A] ring-1 ring-[#F06A6A]/55'
-                  : 'bg-[#243041] text-[#35C2D1] ring-1 ring-[#35C2D1]/50';
+                  ? 'bg-zinc-200 text-black font-semibold shadow-xs ring-1 ring-white/80'
+                  : 'bg-white text-black font-semibold shadow-xs ring-1 ring-white/50';
 
               return (
                 <button
@@ -142,10 +142,10 @@ export function EditorToolbar() {
                     setConfirmResetOpen(false);
                     setActiveTool(tool.id);
                   }}
-                  className={`cursor-pointer rounded px-2.5 py-1 text-xs font-medium transition-colors ${
+                  className={`cursor-pointer rounded-lg px-3 py-1 text-xs font-medium transition-all ${
                     isActive
                       ? activeStyles
-                      : 'text-[#AEB8C5] hover:bg-[#1C2430] hover:text-[#E9EDF2]'
+                      : 'text-zinc-400 hover:bg-zinc-800 hover:text-white'
                   }`}
                 >
                   {tool.label}
@@ -154,7 +154,7 @@ export function EditorToolbar() {
             })}
           </div>
 
-          <div className="h-4 w-px bg-[#2D3B4E]" />
+          <div className="h-4 w-px bg-zinc-800" />
 
           {/* Deshacer / Rehacer */}
           <div className="flex items-center gap-1">
@@ -163,7 +163,7 @@ export function EditorToolbar() {
               disabled={undoStack.length === 0}
               onClick={() => undo()}
               title="Deshacer última acción sobre el circuito (Ctrl+Z)"
-              className="cursor-pointer rounded border border-[#2D3B4E] bg-[#243041] px-2 py-1 font-mono text-[11px] font-medium text-[#E9EDF2] transition-colors hover:border-[#35C2D1]/50 disabled:cursor-not-allowed disabled:opacity-40"
+              className="cursor-pointer rounded-lg border border-zinc-800 bg-zinc-900 px-2.5 py-1 font-mono text-[11px] font-medium text-zinc-200 transition-colors hover:border-zinc-600 hover:text-white disabled:cursor-not-allowed disabled:opacity-40"
             >
               Deshacer
             </button>
@@ -172,13 +172,13 @@ export function EditorToolbar() {
               disabled={redoStack.length === 0}
               onClick={() => redo()}
               title="Rehacer acción deshecha (Ctrl+Shift+Z)"
-              className="cursor-pointer rounded border border-[#2D3B4E] bg-[#243041] px-2 py-1 font-mono text-[11px] font-medium text-[#E9EDF2] transition-colors hover:border-[#35C2D1]/50 disabled:cursor-not-allowed disabled:opacity-40"
+              className="cursor-pointer rounded-lg border border-zinc-800 bg-zinc-900 px-2.5 py-1 font-mono text-[11px] font-medium text-zinc-200 transition-colors hover:border-zinc-600 hover:text-white disabled:cursor-not-allowed disabled:opacity-40"
             >
               Rehacer
             </button>
           </div>
 
-          <div className="h-4 w-px bg-[#2D3B4E]" />
+          <div className="h-4 w-px bg-zinc-800" />
 
           {/* Reiniciar montaje con confirmación discreta */}
           {!confirmResetOpen ? (
@@ -187,27 +187,27 @@ export function EditorToolbar() {
               disabled={!hasAnyPlacedElements}
               onClick={() => setConfirmResetOpen(true)}
               title="Vaciar la protoboard de trabajo para iniciar el montaje desde cero"
-              className="cursor-pointer rounded border border-[#2D3B4E] bg-[#1C2430] px-2 py-1 text-[11px] font-medium text-[#AEB8C5] transition-colors hover:border-[#F06A6A]/55 hover:text-[#F06A6A] disabled:cursor-not-allowed disabled:opacity-40"
+              className="cursor-pointer rounded-lg border border-zinc-800 bg-zinc-900/80 px-2.5 py-1 text-[11px] font-medium text-zinc-400 transition-colors hover:border-zinc-600 hover:text-white disabled:cursor-not-allowed disabled:opacity-40"
             >
               Reiniciar montaje
             </button>
           ) : (
-            <div className="flex items-center gap-1 rounded border border-[#F06A6A]/55 bg-[#2A171D] px-2 py-0.5 text-[11px]">
-              <span className="text-[#F06A6A]">¿Vaciar protoboard?</span>
+            <div className="flex items-center gap-1.5 rounded-lg border border-zinc-600 bg-zinc-900 px-2 py-0.5 text-[11px]">
+              <span className="font-medium text-white">¿Vaciar protoboard?</span>
               <button
                 type="button"
                 onClick={() => {
                   resetWorkingCircuit();
                   setConfirmResetOpen(false);
                 }}
-                className="cursor-pointer rounded bg-[#F06A6A]/20 px-1.5 py-0.5 font-semibold text-[#F06A6A] hover:bg-[#F06A6A]/35"
+                className="cursor-pointer rounded bg-white px-2 py-0.5 font-bold text-black hover:bg-zinc-200"
               >
                 Sí, reiniciar
               </button>
               <button
                 type="button"
                 onClick={() => setConfirmResetOpen(false)}
-                className="cursor-pointer rounded px-1.5 py-0.5 text-[#AEB8C5] hover:text-[#E9EDF2]"
+                className="cursor-pointer rounded px-1.5 py-0.5 text-zinc-400 hover:text-white"
               >
                 No
               </button>
@@ -220,20 +220,20 @@ export function EditorToolbar() {
           {editorFeedback ? (
             <span
               role="status"
-              className={`rounded border px-2 py-0.5 font-mono ${
+              className={`rounded-lg border px-2.5 py-0.5 font-mono ${
                 editorFeedback.tone === 'error'
-                  ? 'border-[#F06A6A]/55 bg-[#2A171D] text-[#F06A6A]'
+                  ? 'border-zinc-500 bg-zinc-900 text-white font-bold'
                   : editorFeedback.tone === 'success'
-                    ? 'border-[#6DD19C]/50 bg-[#152822] text-[#6DD19C]'
-                    : 'border-[#35C2D1]/45 bg-[#141A23] text-[#E9EDF2]'
+                    ? 'border-zinc-600 bg-zinc-800 text-white'
+                    : 'border-zinc-700 bg-zinc-900 text-zinc-200'
               }`}
             >
               {editorFeedback.textEs}
             </span>
           ) : (
-            <span className="text-[#AEB8C5]">{activeToolMeta.helpEs}</span>
+            <span className="text-zinc-400">{activeToolMeta.helpEs}</span>
           )}
-          <span className="hidden rounded border border-[#2D3B4E] bg-[#141A23] px-2 py-0.5 font-mono text-[10px] text-[#AEB8C5] xl:inline-block">
+          <span className="hidden rounded-lg border border-zinc-800 bg-zinc-900/60 px-2 py-0.5 font-mono text-[10px] text-zinc-400 xl:inline-block">
             Esc cancelar · Supr borrar · Ctrl+Z deshacer
           </span>
         </div>
@@ -241,9 +241,9 @@ export function EditorToolbar() {
 
       {/* Subbarra contextual para Herramienta COLOCAR: Bandeja del Kit 74LS83A */}
       {activeTool === 'place' && (
-        <div className="mt-1.5 flex flex-wrap items-center justify-between gap-2 border-t border-[#253142] pt-1.5">
-          <div className="flex flex-wrap items-center gap-1">
-            <span className="mr-1 font-mono text-[10px] uppercase tracking-wider text-[#AEB8C5]">
+        <div className="mt-2 flex flex-wrap items-center justify-between gap-2 border-t border-zinc-800/80 pt-2">
+          <div className="flex flex-wrap items-center gap-1.5">
+            <span className="mr-1 font-mono text-[10px] uppercase tracking-wider text-zinc-400">
               Kit 74LS83A:
             </span>
             {EDITABLE_KIT_CATALOG.map((entry) => {
@@ -256,20 +256,22 @@ export function EditorToolbar() {
                   type="button"
                   onClick={() => setActiveKitItem(entry.type)}
                   title={`${entry.fullLabel} — ${entry.hintEs}`}
-                  className={`inline-flex cursor-pointer items-center gap-1.5 rounded border px-2 py-0.5 text-[11px] font-medium transition-colors ${
+                  className={`inline-flex cursor-pointer items-center gap-1.5 rounded-lg border px-2.5 py-1 text-[11px] font-medium transition-all ${
                     selected
-                      ? 'border-[#35C2D1] bg-[#35C2D1]/18 text-[#E9EDF2]'
+                      ? 'border-white bg-white text-black font-semibold shadow-xs'
                       : exhausted
-                        ? 'border-[#273344] bg-[#141A23]/60 text-[#AEB8C5]/55 hover:border-[#3D5068]'
-                        : 'border-[#2D3B4E] bg-[#141A23] text-[#E9EDF2] hover:border-[#35C2D1]/50'
+                        ? 'border-zinc-850 bg-zinc-950 text-zinc-600 hover:border-zinc-750'
+                        : 'border-zinc-800 bg-zinc-900/80 text-zinc-300 hover:border-zinc-600 hover:text-white'
                   }`}
                 >
                   <span>{entry.shortLabel}</span>
                   <span
-                    className={`rounded px-1 font-mono text-[10px] ${
-                      exhausted
-                        ? 'bg-[#243041] text-[#AEB8C5]/60'
-                        : 'bg-[#243041] text-[#6DD19C]'
+                    className={`rounded px-1.5 py-0.2 font-mono text-[10px] ${
+                      selected
+                        ? 'bg-zinc-900 text-white'
+                        : exhausted
+                          ? 'bg-zinc-900 text-zinc-600'
+                          : 'bg-zinc-800 text-zinc-200'
                     }`}
                   >
                     {avail.remainingCount}/{avail.totalCount}
@@ -283,17 +285,17 @@ export function EditorToolbar() {
           <div className="flex flex-wrap items-center gap-1.5">
             {(activeKitItem === 'resistor-330' || activeKitItem === 'resistor-1k') && (
               <>
-                <span className="font-mono text-[10px] text-[#AEB8C5]">Disposición (R):</span>
+                <span className="font-mono text-[10px] text-zinc-400">Disposición (R):</span>
                 {RESISTOR_DISPOSITIONS.map((disp) => (
                   <button
                     key={disp.id}
                     type="button"
                     title={disp.title}
                     onClick={() => setResistorDisposition(disp.id)}
-                    className={`cursor-pointer rounded border px-2 py-0.5 font-mono text-[10px] transition-colors ${
+                    className={`cursor-pointer rounded-lg border px-2.5 py-0.5 font-mono text-[10px] transition-all ${
                       resistorDisposition === disp.id
-                        ? 'border-[#F1B85A] bg-[#F1B85A]/18 text-[#F1B85A]'
-                        : 'border-[#2D3B4E] bg-[#141A23] text-[#AEB8C5] hover:text-[#E9EDF2]'
+                        ? 'border-white bg-white text-black font-bold shadow-xs'
+                        : 'border-zinc-800 bg-zinc-900 text-zinc-400 hover:border-zinc-600 hover:text-white'
                     }`}
                   >
                     {disp.label}
@@ -303,7 +305,7 @@ export function EditorToolbar() {
                   <button
                     type="button"
                     onClick={cancelActiveOperation}
-                    className="cursor-pointer rounded border border-[#F1B85A]/55 bg-[#243041] px-2 py-0.5 font-mono text-[10px] text-[#F1B85A]"
+                    className="cursor-pointer rounded-lg border border-zinc-600 bg-zinc-900 px-2 py-0.5 font-mono text-[10px] text-white"
                   >
                     Cancelar 1ª pata ({resistorAnchorHoleId})
                   </button>
@@ -313,12 +315,12 @@ export function EditorToolbar() {
 
             {(activeKitItem === 'led-amber' || activeKitItem === 'led-green') && (
               <>
-                <span className="font-mono text-[10px] text-[#AEB8C5]">Polaridad (R):</span>
+                <span className="font-mono text-[10px] text-zinc-400">Polaridad (R):</span>
                 <button
                   type="button"
                   onClick={() => setLedReversed(!ledReversed)}
                   title="Alternar orientación del ánodo (+) y cátodo (− / bisel plano)"
-                  className="cursor-pointer rounded border border-[#F1B85A]/60 bg-[#F1B85A]/15 px-2 py-0.5 font-mono text-[10px] font-semibold text-[#F1B85A]"
+                  className="cursor-pointer rounded-lg border border-zinc-700 bg-zinc-900 px-2.5 py-0.5 font-mono text-[10px] font-semibold text-white hover:border-zinc-500"
                 >
                   {ledReversed
                     ? 'Invertida: Cátodo (−) izq. · Ánodo (+) der.'
@@ -331,7 +333,7 @@ export function EditorToolbar() {
               activeKitItem !== 'resistor-1k' &&
               activeKitItem !== 'led-amber' &&
               activeKitItem !== 'led-green' && (
-                <span className="text-[11px] text-[#AEB8C5]">{activeKitEntry.hintEs}</span>
+                <span className="text-[11px] text-zinc-400">{activeKitEntry.hintEs}</span>
               )}
           </div>
         </div>
@@ -339,9 +341,9 @@ export function EditorToolbar() {
 
       {/* Subbarra contextual para Herramienta CABLEAR: Selector de colores y estado de origen */}
       {activeTool === 'wire' && (
-        <div className="mt-1.5 flex flex-wrap items-center justify-between gap-2 border-t border-[#253142] pt-1.5">
+        <div className="mt-2 flex flex-wrap items-center justify-between gap-2 border-t border-zinc-800/80 pt-2">
           <div className="flex flex-wrap items-center gap-1.5">
-            <span className="font-mono text-[10px] uppercase tracking-wider text-[#AEB8C5]">
+            <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-400">
               Color de aislamiento:
             </span>
             {WIRE_COLOR_PALETTE.map((opt) => {
@@ -353,18 +355,18 @@ export function EditorToolbar() {
                   type="button"
                   onClick={() => setActiveWireColor(opt.colorHex)}
                   title={`${opt.label} — Convención sugerida: ${opt.conventionEs} (propiedad puramente visual)`}
-                  className={`inline-flex cursor-pointer items-center gap-1.5 rounded border px-2 py-0.5 text-[11px] transition-colors ${
+                  className={`inline-flex cursor-pointer items-center gap-1.5 rounded-lg border px-2.5 py-0.5 text-[11px] transition-all ${
                     isSelectedColor
-                      ? 'border-[#E9EDF2] bg-[#243041] font-semibold text-[#E9EDF2]'
-                      : 'border-[#2D3B4E] bg-[#141A23] text-[#AEB8C5] hover:text-[#E9EDF2]'
+                      ? 'border-white bg-zinc-800 font-semibold text-white ring-1 ring-white/50 shadow-xs'
+                      : 'border-zinc-800 bg-zinc-900/80 text-zinc-400 hover:border-zinc-600 hover:text-white'
                   }`}
                 >
                   <span
-                    className="h-2.5 w-2.5 rounded-full border border-white/30"
+                    className="h-2.5 w-2.5 rounded-full border border-white/40"
                     style={{ backgroundColor: opt.colorHex }}
                   />
                   <span>{opt.label}</span>
-                  <span className="hidden font-mono text-[10px] text-[#AEB8C5] md:inline">
+                  <span className="hidden font-mono text-[10px] text-zinc-400 md:inline">
                     ({opt.conventionEs})
                   </span>
                 </button>
@@ -375,21 +377,21 @@ export function EditorToolbar() {
           <div className="flex items-center gap-2 text-[11px]">
             {wireDraft ? (
               <>
-                <span className="rounded border border-[#F1B85A]/60 bg-[#243041] px-2 py-0.5 font-mono text-[11px] text-[#F1B85A]">
+                <span className="rounded-lg border border-zinc-600 bg-zinc-900 px-2.5 py-0.5 font-mono text-[11px] text-white">
                   Origen: {wireDraft.fromTerminalId} → elige destino
                 </span>
                 <button
                   type="button"
                   onClick={cancelActiveOperation}
-                  className="cursor-pointer rounded border border-[#2D3B4E] bg-[#141A23] px-2 py-0.5 font-mono text-[10px] text-[#E9EDF2] hover:border-[#F06A6A]/60 hover:text-[#F06A6A]"
+                  className="cursor-pointer rounded-lg border border-zinc-800 bg-zinc-900 px-2 py-0.5 font-mono text-[10px] text-zinc-300 hover:border-zinc-600 hover:text-white"
                 >
                   Cancelar (Esc)
                 </button>
               </>
             ) : (
-              <span className="text-[11px] text-[#AEB8C5]">
+              <span className="text-[11px] text-zinc-400">
                 Color activo:{' '}
-                <strong className="text-[#E9EDF2]">{activeColorMeta?.label ?? 'Rojo'}</strong> · El
+                <strong className="text-white">{activeColorMeta?.label ?? 'Rojo'}</strong> · El
                 color es visual; la función eléctrica depende solo de los nodos conectados.
               </span>
             )}
@@ -402,19 +404,19 @@ export function EditorToolbar() {
         <div
           role="alertdialog"
           aria-label="Confirmar retirada de componente"
-          className="mt-1.5 flex flex-wrap items-center justify-between gap-2 rounded-md border border-[#F06A6A]/60 bg-[#26161C] px-3 py-1.5 text-xs"
+          className="mt-2 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-zinc-600 bg-zinc-900 p-2.5 text-xs"
         >
           <div className="flex flex-wrap items-center gap-3">
-            <span className="font-semibold text-[#F06A6A]">
+            <span className="font-semibold text-white">
               Retirar {pendingRemoval.componentLabel}
             </span>
             {pendingRemoval.associatedWireCount > 0 ? (
-              <label className="inline-flex cursor-pointer items-center gap-1.5 text-[11px] text-[#E9EDF2]">
+              <label className="inline-flex cursor-pointer items-center gap-1.5 text-[11px] text-zinc-200">
                 <input
                   type="checkbox"
                   checked={pendingRemoval.cascadeWires}
                   onChange={(e) => setPendingRemovalCascade(e.target.checked)}
-                  className="accent-[#F06A6A]"
+                  className="accent-white"
                 />
                 <span>
                   Retirar también {pendingRemoval.associatedWireCount} cable(s) conectado(s) a sus
@@ -422,7 +424,7 @@ export function EditorToolbar() {
                 </span>
               </label>
             ) : (
-              <span className="text-[11px] text-[#AEB8C5]">
+              <span className="text-[11px] text-zinc-400">
                 Se liberarán sus contactos en la protoboard sin dejar conexiones fantasma.
               </span>
             )}
@@ -432,14 +434,14 @@ export function EditorToolbar() {
             <button
               type="button"
               onClick={() => confirmComponentRemoval()}
-              className="cursor-pointer rounded border border-[#F06A6A]/70 bg-[#F06A6A]/20 px-2.5 py-0.5 font-mono text-[11px] font-semibold text-[#F06A6A] hover:bg-[#F06A6A]/35"
+              className="cursor-pointer rounded-lg border border-white bg-white px-3 py-1 font-mono text-[11px] font-bold text-black hover:bg-zinc-200"
             >
               Confirmar retirada
             </button>
             <button
               type="button"
               onClick={cancelActiveOperation}
-              className="cursor-pointer rounded border border-[#2D3B4E] bg-[#141A23] px-2 py-0.5 font-mono text-[11px] text-[#AEB8C5] hover:text-[#E9EDF2]"
+              className="cursor-pointer rounded-lg border border-zinc-800 bg-zinc-900 px-2.5 py-1 font-mono text-[11px] text-zinc-400 hover:text-white"
             >
               Cancelar
             </button>

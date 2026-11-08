@@ -22,7 +22,7 @@ export function LabCanvas() {
   const clearSelection = useLabStore((s) => s.clearSelection);
 
   return (
-    <div className="relative h-full w-full select-none bg-[#10141B]">
+    <div className="relative h-full w-full select-none bg-black">
       <Canvas
         shadows
         dpr={[1, 2]}

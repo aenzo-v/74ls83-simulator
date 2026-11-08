@@ -83,7 +83,7 @@ export function OperationBar() {
 
   const renderInputSwitchButton = (
     spec: InputChannelButtonSpec,
-    accent: 'cyan' | 'violet' | 'amber',
+    _accent: 'cyan' | 'violet' | 'amber',
   ) => {
     const isMounted = mode === 'mounted' || placedDipIds.has(spec.componentId);
     const isSwitchOn = isMounted && Boolean(switchStates[spec.channelId]);
@@ -95,18 +95,9 @@ export function OperationBar() {
       (selection.kind === 'pin' && selection.pinNumber === spec.pin);
     const isTraced = tracedSignal === spec.signal;
 
-    const activeTone =
-      accent === 'cyan'
-        ? isPsuOn
-          ? 'border-[#35C2D1]/70 bg-[#35C2D1]/18 text-[#35C2D1]'
-          : 'border-[#35C2D1]/40 bg-[#243041] text-[#AEB8C5]'
-        : accent === 'violet'
-          ? isPsuOn
-            ? 'border-[#9D8CFF]/70 bg-[#9D8CFF]/18 text-[#C4B9FF]'
-            : 'border-[#9D8CFF]/40 bg-[#243041] text-[#AEB8C5]'
-          : isPsuOn
-            ? 'border-[#F1B85A]/75 bg-[#F1B85A]/18 text-[#F1B85A]'
-            : 'border-[#F1B85A]/40 bg-[#243041] text-[#AEB8C5]';
+    const activeTone = isPsuOn
+      ? 'border-white bg-white text-black font-bold shadow-[0_0_12px_rgba(255,255,255,0.35)] ring-1 ring-white/80'
+      : 'border-zinc-600 bg-zinc-800 text-zinc-200 font-bold';
 
     return (
       <button
@@ -128,21 +119,25 @@ export function OperationBar() {
             ? `Conmutar interruptor ${spec.signal} (${isSwitchOn ? 'ON = 1' : 'OFF = 0'}) · Pin ${spec.pin} (${pinState?.netId ?? 'sin red'})`
             : `Coloca primero el interruptor ${spec.componentId} sobre la protoboard`
         }
-        className={`group relative flex h-12 min-w-11 flex-col items-center justify-center rounded-md border px-2.5 py-1 transition-all focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-[#35C2D1] ${
+        className={`group relative flex h-12 min-w-11 flex-col items-center justify-center rounded-lg border px-2.5 py-1 transition-all focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-white ${
           !isMounted
-            ? 'cursor-not-allowed border-[#253142] bg-[#141A23]/50 text-[#AEB8C5]/45'
+            ? 'cursor-not-allowed border-zinc-900 bg-zinc-950/40 text-zinc-600'
             : isSwitchOn
               ? `cursor-pointer ${activeTone}`
-              : 'cursor-pointer border-[#2D3B4E] bg-[#141A23] text-[#E9EDF2] hover:border-[#3D5068]'
+              : 'cursor-pointer border-zinc-800 bg-zinc-950 text-zinc-200 hover:border-zinc-600'
         } ${
           isSelected
-            ? 'ring-2 ring-[#F1B85A]/75'
+            ? 'ring-2 ring-white'
             : isTraced
-              ? 'ring-1 ring-[#35C2D1]'
+              ? 'ring-1 ring-zinc-400'
               : ''
         }`}
       >
-        <span className="font-mono text-[11px] font-semibold leading-none text-[#AEB8C5] group-hover:text-[#E9EDF2]">
+        <span
+          className={`font-mono text-[11px] font-semibold leading-none ${
+            isSwitchOn && isPsuOn ? 'text-black' : 'text-zinc-400 group-hover:text-white'
+          }`}
+        >
           {spec.signal}
         </span>
         <span className="mt-0.5 font-mono text-base font-bold leading-none">
@@ -166,15 +161,12 @@ export function OperationBar() {
 
     const bitText = resolvedBit === 1 ? '1' : resolvedBit === 0 ? '0' : '—';
 
-    const litClasses = spec.isCarry
-      ? 'border-[#F1B85A]/75 bg-[#F1B85A]/18 text-[#FFB238]'
-      : 'border-[#6DD19C]/75 bg-[#6DD19C]/18 text-[#6DD19C]';
+    const litClasses =
+      'border-white bg-white text-black font-bold shadow-[0_0_16px_rgba(255,255,255,0.6)] ring-1 ring-white';
 
     const dotClasses = isLit
-      ? spec.isCarry
-        ? 'bg-[#FFB238] shadow-[0_0_6px_#FFB238]'
-        : 'bg-[#6DD19C] shadow-[0_0_6px_#6DD19C]'
-      : 'bg-[#2D3B4E]';
+      ? 'bg-black shadow-[0_0_6px_rgba(0,0,0,0.5)]'
+      : 'bg-zinc-700';
 
     return (
       <button
@@ -193,23 +185,27 @@ export function OperationBar() {
             ? `Inspeccionar salida ${spec.signal} (Pin ${spec.pin} · ${ledState?.statusLabel ?? 'Sin evaluar'})`
             : `Salida ${spec.signal} (Pin ${spec.pin}) · LED aún no colocado`
         }
-        className={`relative flex h-12 min-w-11 cursor-pointer flex-col items-center justify-center rounded-md border px-2.5 py-1 transition-all focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-[#35C2D1] ${
+        className={`relative flex h-12 min-w-11 cursor-pointer flex-col items-center justify-center rounded-lg border px-2.5 py-1 transition-all focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-white ${
           isLit
             ? litClasses
             : resolvedBit === 0
-              ? 'border-[#2D3B4E] bg-[#141A23] text-[#E9EDF2] hover:border-[#3D5068]'
-              : 'border-[#2D3B4E]/80 bg-[#141A23]/70 text-[#AEB8C5]/55 hover:border-[#3D5068]'
+              ? 'border-zinc-800 bg-zinc-950 text-zinc-200 hover:border-zinc-600'
+              : 'border-zinc-850 bg-zinc-950/60 text-zinc-500 hover:border-zinc-700'
         } ${
           isSelected
-            ? 'ring-2 ring-[#F1B85A]/75'
+            ? 'ring-2 ring-white'
             : isTraced
-              ? 'ring-1 ring-[#35C2D1]'
+              ? 'ring-1 ring-zinc-400'
               : ''
         }`}
       >
         <div className="flex items-center gap-1">
           <span aria-hidden="true" className={`h-1.5 w-1.5 rounded-full ${dotClasses}`} />
-          <span className="font-mono text-[11px] font-semibold leading-none text-[#AEB8C5]">
+          <span
+            className={`font-mono text-[11px] font-semibold leading-none ${
+              isLit ? 'text-black' : 'text-zinc-400'
+            }`}
+          >
             {spec.signal}
           </span>
         </div>
@@ -221,10 +217,10 @@ export function OperationBar() {
   return (
     <footer
       aria-label="Consola interactiva del circuito 74LS83A"
-      className="shrink-0 border-t border-[#2D3B4E] bg-[#1C2430] px-4 py-2"
+      className="shrink-0 rounded-2xl border border-zinc-800/80 bg-zinc-950/95 px-4 py-3 shadow-sm backdrop-blur-md"
     >
       {/* Franja superior compacta: Fuente +5 V, Ejemplos rápidos y Trazado eléctrico */}
-      <div className="mb-2 flex flex-wrap items-center justify-between gap-2 border-b border-[#273344] pb-1.5">
+      <div className="mb-2.5 flex flex-wrap items-center justify-between gap-2 border-b border-zinc-800/80 pb-2">
         <div className="flex flex-wrap items-center gap-2">
           {/* Interruptor maestro de fuente +5 V */}
           <button
@@ -235,25 +231,25 @@ export function OperationBar() {
               setSelection({ kind: 'component', componentId: POWER_SUPPLY_5V.id });
             }}
             title="Encender o poner en espera la fuente regulada de +5.0 V CC"
-            className={`inline-flex cursor-pointer items-center gap-2 rounded-md border px-2.5 py-1 font-mono text-xs font-semibold transition-colors ${
+            className={`inline-flex cursor-pointer items-center gap-2 rounded-xl border px-3 py-1 font-mono text-xs font-semibold transition-all ${
               isPsuOn
-                ? 'border-[#6DD19C]/55 bg-[#6DD19C]/15 text-[#6DD19C] hover:bg-[#6DD19C]/25'
-                : 'border-[#F1B85A]/60 bg-[#F1B85A]/15 text-[#F1B85A] hover:bg-[#F1B85A]/25'
+                ? 'border-zinc-600 bg-zinc-800 text-white shadow-xs hover:bg-zinc-700 hover:border-zinc-500'
+                : 'border-zinc-800 bg-zinc-900/60 text-zinc-400 hover:border-zinc-700 hover:text-zinc-200'
             }`}
           >
             <span
               className={`h-2 w-2 rounded-full ${
-                isPsuOn ? 'bg-[#6DD19C] shadow-[0_0_6px_#6DD19C]' : 'bg-[#F1B85A]'
+                isPsuOn ? 'bg-white shadow-[0_0_8px_rgba(255,255,255,0.8)]' : 'border border-zinc-500 bg-transparent'
               }`}
             />
             <span>{isPsuOn ? 'Fuente +5.0 V: ON' : 'Fuente +5.0 V: APAGADA (STBY)'}</span>
           </button>
 
-          <div className="hidden h-4 w-px bg-[#2D3B4E] sm:block" />
+          <div className="hidden h-4 w-px bg-zinc-800 sm:block" />
 
           {/* Ejemplos rápidos (configuran los interruptores reales del circuito) */}
           <div className="flex flex-wrap items-center gap-1.5">
-            <span className="text-[11px] font-medium text-[#AEB8C5]">Ejemplos:</span>
+            <span className="text-[11px] font-medium text-zinc-400">Ejemplos:</span>
             {QUICK_ADDITION_PRESETS.map((preset) => {
               const isActivePreset =
                 anySwitchMounted && doesPresetMatchSwitches(preset, switchStates);
@@ -270,12 +266,12 @@ export function OperationBar() {
                       ? preset.description
                       : 'Coloca al menos un interruptor DIP en la protoboard para aplicar ejemplos'
                   }
-                  className={`rounded border px-2 py-0.5 font-mono text-xs font-semibold transition-colors ${
+                  className={`rounded-lg border px-2.5 py-1 font-mono text-xs font-semibold transition-all ${
                     !anySwitchMounted
-                      ? 'cursor-not-allowed border-[#253142] bg-[#141A23]/50 text-[#AEB8C5]/45'
+                      ? 'cursor-not-allowed border-zinc-900 bg-zinc-950/40 text-zinc-600'
                       : isActivePreset
-                        ? 'cursor-pointer border-[#35C2D1]/70 bg-[#35C2D1]/20 text-[#35C2D1]'
-                        : 'cursor-pointer border-[#2D3B4E] bg-[#141A23] text-[#E9EDF2] hover:border-[#35C2D1]/45 hover:text-[#35C2D1]'
+                        ? 'cursor-pointer border-white bg-white text-black font-bold shadow-xs'
+                        : 'cursor-pointer border-zinc-800 bg-zinc-900/80 text-zinc-300 hover:border-zinc-600 hover:text-white'
                   }`}
                 >
                   {preset.label}
@@ -289,7 +285,7 @@ export function OperationBar() {
         <div className="flex items-center gap-1.5">
           <label
             htmlFor="signal-trace-select"
-            className="text-[11px] font-medium text-[#AEB8C5]"
+            className="text-[11px] font-medium text-zinc-400"
           >
             Recorrido eléctrico:
           </label>
@@ -300,7 +296,7 @@ export function OperationBar() {
               const val = e.target.value;
               setTracedSignal(val ? (val as SignalCode) : null);
             }}
-            className="cursor-pointer rounded border border-[#2D3B4E] bg-[#141A23] px-2 py-0.5 font-mono text-xs text-[#E9EDF2] focus:border-[#35C2D1] focus:outline-none"
+            className="cursor-pointer rounded-lg border border-zinc-800 bg-zinc-900 px-2.5 py-1 font-mono text-xs text-zinc-200 focus:border-zinc-500 focus:outline-none"
           >
             <option value="">Sin resaltar (vista normal)</option>
             <optgroup label="Entradas Operando A">
@@ -334,7 +330,7 @@ export function OperationBar() {
             <button
               type="button"
               onClick={() => setTracedSignal(null)}
-              className="cursor-pointer rounded border border-[#35C2D1]/50 bg-[#35C2D1]/15 px-2 py-0.5 font-mono text-[11px] font-medium text-[#35C2D1] hover:bg-[#35C2D1]/25"
+              className="cursor-pointer rounded-lg border border-zinc-700 bg-zinc-800 px-2.5 py-1 font-mono text-[11px] font-medium text-white hover:bg-zinc-700"
             >
               Limpiar
             </button>
@@ -344,15 +340,15 @@ export function OperationBar() {
 
       {/* Consola principal de operación: Interruptores A, B, C0 -> LEDs C4/S3..S0 -> Lectura DEC/BIN/HEX */}
       <div className="flex flex-wrap items-center justify-between gap-3">
-        {/* Bloque de 9 interruptores de entrada */}
-        <div className="flex flex-wrap items-end gap-2.5">
-          {/* Operando A */}
-          <div>
-            <div className="mb-1 flex items-center justify-between gap-2">
-              <span className="text-[11px] font-semibold uppercase tracking-wider text-[#35C2D1]">
+        {/* Bloque de 9 interruptores de entrada organizados en Bento Cards */}
+        <div className="flex flex-wrap items-center gap-2">
+          {/* Operando A Bento Box */}
+          <div className="rounded-xl border border-zinc-800/80 bg-zinc-900/50 p-2.5">
+            <div className="mb-1.5 flex items-center justify-between gap-3">
+              <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-zinc-400">
                 Entrada A
               </span>
-              <span className="font-mono text-xs font-bold text-[#E9EDF2]">
+              <span className="font-mono text-xs font-bold text-white">
                 {adder ? `${adder.operandA} (${adder.formatted.aHex})` : '—'}
               </span>
             </div>
@@ -361,15 +357,15 @@ export function OperationBar() {
             </div>
           </div>
 
-          <span className="pb-3 font-mono text-base font-bold text-[#AEB8C5]">+</span>
+          <span className="px-0.5 font-mono text-base font-bold text-zinc-500">+</span>
 
-          {/* Operando B */}
-          <div>
-            <div className="mb-1 flex items-center justify-between gap-2">
-              <span className="text-[11px] font-semibold uppercase tracking-wider text-[#B3A6FF]">
+          {/* Operando B Bento Box */}
+          <div className="rounded-xl border border-zinc-800/80 bg-zinc-900/50 p-2.5">
+            <div className="mb-1.5 flex items-center justify-between gap-3">
+              <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-zinc-400">
                 Entrada B
               </span>
-              <span className="font-mono text-xs font-bold text-[#E9EDF2]">
+              <span className="font-mono text-xs font-bold text-white">
                 {adder ? `${adder.operandB} (${adder.formatted.bHex})` : '—'}
               </span>
             </div>
@@ -378,12 +374,12 @@ export function OperationBar() {
             </div>
           </div>
 
-          <span className="pb-3 font-mono text-base font-bold text-[#AEB8C5]">+</span>
+          <span className="px-0.5 font-mono text-base font-bold text-zinc-500">+</span>
 
-          {/* Acarreo Cin (C0) */}
-          <div>
-            <div className="mb-1 flex items-center justify-between gap-1">
-              <span className="text-[11px] font-semibold uppercase tracking-wider text-[#F1B85A]">
+          {/* Acarreo Cin (C0) Bento Box */}
+          <div className="rounded-xl border border-zinc-800/80 bg-zinc-900/50 p-2.5">
+            <div className="mb-1.5 flex items-center justify-between gap-1">
+              <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-zinc-400">
                 Cin
               </span>
             </div>
@@ -392,13 +388,14 @@ export function OperationBar() {
         </div>
 
         {/* Bloque de salidas reales (LEDs C4, S3..S0) y resultado multibase */}
-        <div className="flex flex-wrap items-end gap-3">
-          <div>
-            <div className="mb-1 flex items-center justify-between gap-2">
-              <span className="text-[11px] font-semibold uppercase tracking-wider text-[#6DD19C]">
+        <div className="flex flex-wrap items-center gap-3">
+          {/* Bento Box LEDs */}
+          <div className="rounded-xl border border-zinc-800/80 bg-zinc-900/50 p-2.5">
+            <div className="mb-1.5 flex items-center justify-between gap-3">
+              <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-zinc-400">
                 Salidas LED (Cout · Σ)
               </span>
-              <span className="font-mono text-[11px] text-[#AEB8C5]">
+              <span className="font-mono text-[11px] text-zinc-300">
                 {adder ? `C4=${adder.carryOut} · Σ=${adder.sumValue}` : 'Inactivas'}
               </span>
             </div>
@@ -407,34 +404,36 @@ export function OperationBar() {
             </div>
           </div>
 
-          {/* Visor multibase DEC · BIN · HEX o alerta educativa si no hay salida válida */}
+          {/* Visor multibase DEC · BIN · HEX o alerta educativa en Bento Card */}
           {adder ? (
-            <div className="flex items-center gap-3 rounded-lg border border-[#2D3B4E] bg-[#141A23] px-3.5 py-1.5">
-              <div className="border-r border-[#273344] pr-3">
-                <span className="block font-mono text-[10px] uppercase text-[#AEB8C5]">
+            <div className="flex items-center gap-4 rounded-xl border border-zinc-700/80 bg-gradient-to-br from-zinc-900 to-zinc-950 px-4 py-2.5 shadow-sm">
+              <div className="border-r border-zinc-800 pr-3.5">
+                <span className="block font-mono text-[10px] uppercase text-zinc-400">
                   Operación (DEC)
                 </span>
-                <span className="font-mono text-base font-bold text-[#E9EDF2]">
+                <span className="font-mono text-base font-bold text-zinc-200">
                   {adder.operandA} + {adder.operandB} + {adder.carryIn} ={' '}
-                  <strong className="text-[#6DD19C]">{adder.totalValue}</strong>
+                  <strong className="text-white font-extrabold">{adder.totalValue}</strong>
                 </span>
               </div>
-              <div className="border-r border-[#273344] pr-3">
-                <span className="block font-mono text-[10px] uppercase text-[#AEB8C5]">
+              <div className="border-r border-zinc-800 pr-3.5">
+                <span className="block font-mono text-[10px] uppercase text-zinc-400">
                   Binario (5 bits)
                 </span>
-                <span className="font-mono text-base font-bold text-[#6DD19C]">
-                  <span className="text-[#FFB238]">{adder.carryOut}</span>{' '}
+                <span className="font-mono text-base font-bold text-white">
+                  <span className="rounded bg-zinc-800 px-1 py-0.5 text-white border border-zinc-700">
+                    {adder.carryOut}
+                  </span>{' '}
                   {adder.formatted.sumBinary4}
                 </span>
               </div>
               <div>
-                <span className="block font-mono text-[10px] uppercase text-[#AEB8C5]">
+                <span className="block font-mono text-[10px] uppercase text-zinc-400">
                   Hexadecimal
                 </span>
-                <span className="font-mono text-base font-bold text-[#35C2D1]">
+                <span className="font-mono text-base font-bold text-white">
                   {adder.formatted.totalHex}{' '}
-                  <span className="text-xs font-normal text-[#AEB8C5]">
+                  <span className="text-xs font-normal text-zinc-400">
                     (Σ={adder.formatted.sumHex})
                   </span>
                 </span>
@@ -444,15 +443,15 @@ export function OperationBar() {
             <div
               role="status"
               aria-live="polite"
-              className="flex max-w-md items-center justify-between gap-3 rounded-lg border border-[#F1B85A]/55 bg-[#141A23] px-3.5 py-2"
+              className="flex max-w-md items-center justify-between gap-3 rounded-xl border border-zinc-700 bg-zinc-900/90 px-4 py-2.5 shadow-sm"
             >
               <div className="min-w-0">
-                <div className="font-mono text-xs font-semibold text-[#F1B85A]">
+                <div className="font-mono text-xs font-semibold text-white">
                   {!isPsuOn
                     ? 'Sin salida válida · Fuente +5.0 V apagada (STBY)'
                     : `Circuito incompleto o fallo · ${firstError?.title ?? 'Revisa conexiones'}`}
                 </div>
-                <p className="truncate text-xs text-[#AEB8C5]">
+                <p className="truncate text-xs text-zinc-400">
                   {!isPsuOn
                     ? 'El 74LS83A requiere +5 V en Pin 5 (VCC); LEDs y salidas permanecen apagados.'
                     : firstError?.message ?? 'Verifica alimentación y entradas del circuito.'}
@@ -462,7 +461,7 @@ export function OperationBar() {
                 <button
                   type="button"
                   onClick={() => setPowerSupplyOn(true)}
-                  className="shrink-0 cursor-pointer rounded border border-[#6DD19C]/55 bg-[#6DD19C]/15 px-2.5 py-1 font-mono text-xs font-semibold text-[#6DD19C] hover:bg-[#6DD19C]/25"
+                  className="shrink-0 cursor-pointer rounded-lg border border-white bg-white px-3 py-1 font-mono text-xs font-bold text-black hover:bg-zinc-200"
                 >
                   Encender +5 V
                 </button>

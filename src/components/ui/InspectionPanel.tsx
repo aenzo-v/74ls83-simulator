@@ -177,10 +177,10 @@ export function InspectionPanel() {
       <button
         type="button"
         onClick={() => toggleTracedSignal(signal)}
-        className={`w-full cursor-pointer rounded-md border px-2.5 py-1.5 font-mono text-xs font-semibold transition-colors ${
+        className={`w-full cursor-pointer rounded-xl border px-3 py-2 font-mono text-xs font-semibold transition-all ${
           active
-            ? 'border-[#35C2D1] bg-[#35C2D1]/20 text-[#35C2D1]'
-            : 'border-[#2D3B4E] bg-[#141A23] text-[#35C2D1] hover:border-[#35C2D1]/60 hover:bg-[#192230]'
+            ? 'border-white bg-white text-black font-bold shadow-xs'
+            : 'border-zinc-700 bg-zinc-900 text-zinc-200 hover:border-zinc-500 hover:bg-zinc-800 hover:text-white'
         }`}
       >
         {active
@@ -198,7 +198,7 @@ export function InspectionPanel() {
       <button
         type="button"
         onClick={() => requestComponentRemoval(componentId)}
-        className="w-full cursor-pointer rounded-md border border-[#F06A6A]/50 bg-[#2A171D] px-2.5 py-1.5 font-mono text-xs font-semibold text-[#F06A6A] transition-colors hover:border-[#F06A6A] hover:bg-[#381D26]"
+        className="w-full cursor-pointer rounded-xl border border-zinc-600 bg-zinc-900 px-3 py-2 font-mono text-xs font-semibold text-white transition-all hover:border-zinc-400 hover:bg-zinc-800"
       >
         {labelEs}
       </button>
@@ -211,18 +211,18 @@ export function InspectionPanel() {
   return (
     <aside
       aria-label="Panel técnico de inspección y guía"
-      className="flex h-full w-92 shrink-0 flex-col border-l border-[#2D3B4E] bg-[#1C2430] xl:w-96"
+      className="flex h-full w-92 shrink-0 flex-col rounded-2xl border border-zinc-800/80 bg-zinc-950/95 text-zinc-100 shadow-sm overflow-hidden xl:w-96"
     >
       {/* Pestañas en modo guiado */}
       {mode === 'guided' && (
-        <div className="flex shrink-0 gap-1 border-b border-[#2D3B4E] bg-[#141A23] p-1.5">
+        <div className="flex shrink-0 gap-1.5 border-b border-zinc-800/80 bg-zinc-900/60 p-2">
           <button
             type="button"
             onClick={() => setGuidedActiveTab('guide')}
-            className={`flex-1 cursor-pointer rounded py-1.5 text-center font-mono text-xs font-semibold transition-colors ${
+            className={`flex-1 cursor-pointer rounded-xl py-1.5 text-center font-mono text-xs font-semibold transition-all ${
               guidedActiveTab === 'guide'
-                ? 'bg-[#243041] text-[#35C2D1] shadow-xs ring-1 ring-[#35C2D1]/40'
-                : 'text-[#AEB8C5] hover:text-[#E9EDF2]'
+                ? 'bg-white text-black font-semibold shadow-xs ring-1 ring-white/50'
+                : 'text-zinc-400 hover:text-white'
             }`}
           >
             Guía de Montaje ({guidedCurrentStageIndex + 1}/9)
@@ -230,10 +230,10 @@ export function InspectionPanel() {
           <button
             type="button"
             onClick={() => setGuidedActiveTab('inspector')}
-            className={`flex-1 cursor-pointer rounded py-1.5 text-center font-mono text-xs font-semibold transition-colors ${
+            className={`flex-1 cursor-pointer rounded-xl py-1.5 text-center font-mono text-xs font-semibold transition-all ${
               guidedActiveTab === 'inspector'
-                ? 'bg-[#243041] text-[#35C2D1] shadow-xs ring-1 ring-[#35C2D1]/40'
-                : 'text-[#AEB8C5] hover:text-[#E9EDF2]'
+                ? 'bg-white text-black font-semibold shadow-xs ring-1 ring-white/50'
+                : 'text-zinc-400 hover:text-white'
             }`}
           >
             Inspector Técnico
@@ -248,12 +248,12 @@ export function InspectionPanel() {
       ) : (
         <>
           {/* Cabecera del panel técnico */}
-          <div className="flex shrink-0 items-center justify-between border-b border-[#2D3B4E] px-4 py-3">
+          <div className="flex shrink-0 items-center justify-between border-b border-zinc-800/80 px-4 py-3">
             <div>
-              <h2 className="text-xs font-semibold uppercase tracking-wider text-[#E9EDF2]">
+              <h2 className="text-xs font-semibold uppercase tracking-wider text-white">
                 {mode === 'guided' ? 'Inspector Técnico' : 'Inspector y Análisis Binario'}
               </h2>
-              <p className="text-[11px] text-[#AEB8C5]">
+              <p className="text-[11px] text-zinc-400">
                 {mode === 'guided'
                   ? 'Verificación eléctrica de componentes y nodos'
                   : 'Sincronizado en tiempo real con el motor eléctrico'}
@@ -262,44 +262,44 @@ export function InspectionPanel() {
             <button
               type="button"
               onClick={() => requestCameraPreset('chip-closeup')}
-              className="cursor-pointer rounded border border-[#2D3B4E] bg-[#243041] px-2 py-1 text-[11px] font-medium text-[#35C2D1] transition-colors hover:border-[#35C2D1]/50"
+              className="cursor-pointer rounded-xl border border-zinc-700 bg-zinc-800 px-2.5 py-1 text-[11px] font-medium text-white transition-all hover:border-zinc-500 hover:bg-zinc-700"
             >
               Acercar IC
             </button>
           </div>
 
-          <div className="flex-1 space-y-4 overflow-y-auto p-4">
+          <div className="flex-1 space-y-3.5 overflow-y-auto p-3.5">
         {/* Tarjeta del integrado cuando está seleccionado en modo editable */}
         {mode === 'guided' && selection.kind === 'chip' && circuit.chip && (
-          <section className="space-y-3 rounded-lg border border-[#F1B85A]/45 bg-[#243041] p-3.5">
+          <section className="space-y-3 rounded-xl border border-zinc-800/80 bg-zinc-900/50 p-3.5 shadow-sm">
             <div className="flex items-start justify-between gap-2">
               <div>
-                <span className="font-mono text-[11px] text-[#F1B85A]">
+                <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-400">
                   INTEGRADO MONTADO · DIP-16
                 </span>
-                <h3 className="text-sm font-semibold text-[#E9EDF2]">
+                <h3 className="text-sm font-semibold text-white">
                   {CHIP_74LS83_PLACEMENT.partNumber} ({CHIP_74LS83_PLACEMENT.shortName})
                 </h3>
               </div>
-              <span className="rounded border border-[#2D3B4E] bg-[#141A23] px-2 py-0.5 font-mono text-[11px] text-[#35C2D1]">
+              <span className="rounded-lg border border-zinc-750 bg-zinc-800 px-2 py-0.5 font-mono text-[11px] text-zinc-200">
                 Col {circuit.chip.startColumn}–{circuit.chip.startColumn + 7}
               </span>
             </div>
 
-            <div className="grid grid-cols-2 gap-2 rounded-md border border-[#2D3B4E] bg-[#141A23]/80 p-2.5 text-xs">
+            <div className="grid grid-cols-2 gap-2 rounded-lg border border-zinc-800/80 bg-zinc-950/80 p-2.5 text-xs">
               <div>
-                <span className="block text-[10px] uppercase text-[#AEB8C5]">
+                <span className="block text-[10px] uppercase text-zinc-400">
                   Pin 5 · VCC (+5 V)
                 </span>
-                <span className="font-mono text-[#F06A6A]">
+                <span className="font-mono text-white">
                   f{circuit.chip.startColumn + 4} ({solution.pins[5]?.netId ?? '—'})
                 </span>
               </div>
               <div>
-                <span className="block text-[10px] uppercase text-[#AEB8C5]">
+                <span className="block text-[10px] uppercase text-zinc-400">
                   Pin 12 · GND (0 V)
                 </span>
-                <span className="font-mono text-[#7AA7E8]">
+                <span className="font-mono text-zinc-300">
                   e{circuit.chip.startColumn + 4} ({solution.pins[12]?.netId ?? '—'})
                 </span>
               </div>
@@ -320,55 +320,55 @@ export function InspectionPanel() {
           const net = pinState?.netId ? solution.nets[pinState.netId] : undefined;
 
           return (
-            <section className="space-y-3 rounded-lg border border-[#F1B85A]/45 bg-[#243041] p-3.5">
+            <section className="space-y-3 rounded-xl border border-zinc-800/80 bg-zinc-900/50 p-3.5 shadow-sm">
               <div className="flex items-start justify-between gap-2">
                 <div>
-                  <span className="font-mono text-[11px] text-[#F1B85A]">
+                  <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-400">
                     PIN {spec.pinNumber} · SN74LS83A
                   </span>
-                  <h3 className="text-sm font-semibold text-[#E9EDF2]">
+                  <h3 className="text-sm font-semibold text-white">
                     {spec.signal} — {spec.shortLabel}
                   </h3>
                 </div>
-                <span className="rounded border border-[#2D3B4E] bg-[#141A23] px-2 py-0.5 font-mono text-[11px] text-[#35C2D1]">
+                <span className="rounded-lg border border-zinc-700 bg-zinc-800 px-2 py-0.5 font-mono text-[11px] text-white">
                   Nodo {holeId}
                 </span>
               </div>
 
-              <div className="grid grid-cols-2 gap-2 rounded-md border border-[#2D3B4E] bg-[#141A23]/80 p-2.5 text-xs">
+              <div className="grid grid-cols-2 gap-2 rounded-lg border border-zinc-800/80 bg-zinc-950/80 p-2.5 text-xs">
                 <div>
-                  <span className="block text-[10px] uppercase text-[#AEB8C5]">
+                  <span className="block text-[10px] uppercase text-zinc-400">
                     Hoja de datos TI
                   </span>
-                  <span className="font-mono font-semibold text-[#E9EDF2]">
+                  <span className="font-mono font-semibold text-white">
                     {spec.datasheetAlias}
                   </span>
                 </div>
                 <div>
-                  <span className="block text-[10px] uppercase text-[#AEB8C5]">Tipo</span>
-                  <span className="font-medium text-[#E9EDF2]">
+                  <span className="block text-[10px] uppercase text-zinc-400">Tipo</span>
+                  <span className="font-medium text-zinc-200">
                     {directionLabel(spec.direction)}
                   </span>
                 </div>
                 <div>
-                  <span className="block text-[10px] uppercase text-[#AEB8C5]">
+                  <span className="block text-[10px] uppercase text-zinc-400">
                     Pista / Red
                   </span>
-                  <span className="font-mono text-[#6DD19C]">
+                  <span className="font-mono text-zinc-300">
                     {stripLabel} · {pinState?.netId ?? '—'}
                   </span>
                 </div>
                 <div>
-                  <span className="block text-[10px] uppercase text-[#AEB8C5]">
+                  <span className="block text-[10px] uppercase text-zinc-400">
                     Estado eléctrico
                   </span>
                   <span
                     className={`font-mono ${
                       pinState?.logicLevel === 1
-                        ? 'font-semibold text-[#6DD19C]'
+                        ? 'font-bold text-white'
                         : pinState?.logicLevel === 0
-                          ? 'text-[#E9EDF2]'
-                          : 'text-[#F1B85A]'
+                          ? 'text-zinc-300'
+                          : 'text-zinc-400'
                     }`}
                   >
                     {pinState
@@ -381,8 +381,8 @@ export function InspectionPanel() {
               {renderTraceButton(spec.signal)}
 
               {net && net.wireIds.length > 0 && (
-                <div className="rounded-md border border-[#2D3B4E] bg-[#141A23] px-2.5 py-2 text-[11px]">
-                  <span className="block text-[10px] uppercase text-[#AEB8C5]">
+                <div className="rounded-lg border border-zinc-800/80 bg-zinc-950/80 px-2.5 py-2 text-[11px]">
+                  <span className="block text-[10px] uppercase text-zinc-400">
                     Cables conectados a esta red
                   </span>
                   <div className="mt-1 flex flex-wrap gap-1">
@@ -391,7 +391,7 @@ export function InspectionPanel() {
                         key={wId}
                         type="button"
                         onClick={() => setSelection({ kind: 'wire', wireId: wId })}
-                        className="cursor-pointer rounded border border-[#2D3B4E] bg-[#243041] px-1.5 py-0.5 font-mono text-[10px] text-[#35C2D1] hover:border-[#35C2D1]/60"
+                        className="cursor-pointer rounded-md border border-zinc-700 bg-zinc-850 px-1.5 py-0.5 font-mono text-[10px] text-white hover:border-zinc-500"
                       >
                         {wId}
                       </button>
@@ -400,8 +400,8 @@ export function InspectionPanel() {
                 </div>
               )}
 
-              <p className="text-xs leading-relaxed text-[#E9EDF2]">{spec.summary}</p>
-              <p className="rounded-md border border-[#2D3B4E] bg-[#1C2430] p-2.5 text-[11px] leading-relaxed text-[#AEB8C5]">
+              <p className="text-xs leading-relaxed text-zinc-300">{spec.summary}</p>
+              <p className="rounded-lg border border-zinc-800 bg-zinc-950/70 p-2.5 text-[11px] leading-relaxed text-zinc-400">
                 {spec.educationalNote}
               </p>
             </section>
@@ -420,21 +420,21 @@ export function InspectionPanel() {
               : undefined;
 
             return (
-              <section className="space-y-3 rounded-lg border border-[#35C2D1]/45 bg-[#243041] p-3.5">
+              <section className="space-y-3 rounded-xl border border-zinc-800/80 bg-zinc-900/50 p-3.5 shadow-sm">
                 <div>
-                  <span className="font-mono text-[11px] text-[#35C2D1]">
+                  <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-400">
                     INTERRUPTOR DIP · {comp.id.toUpperCase()} (COL {comp.startColumn}–{comp.endColumn})
                   </span>
-                  <h3 className="text-sm font-semibold text-[#E9EDF2]">{comp.label}</h3>
+                  <h3 className="text-sm font-semibold text-white">{comp.label}</h3>
                 </div>
-                <p className="text-xs leading-relaxed text-[#AEB8C5]">{comp.description}</p>
+                <p className="text-xs leading-relaxed text-zinc-400">{comp.description}</p>
 
                 {focusedChannel && (() => {
                   const targetPin = getPinSpecBySignal(focusedChannel.signal);
                   return (
-                    <div className="space-y-2 rounded-md border border-[#F1B85A]/45 bg-[#141A23] p-2.5 text-xs">
+                    <div className="space-y-2 rounded-lg border border-zinc-700 bg-zinc-950/80 p-2.5 text-xs">
                       <div className="flex items-center justify-between">
-                        <span className="font-mono font-semibold text-[#F1B85A]">
+                        <span className="font-mono font-semibold text-white">
                           Canal activo: {focusedChannel.signal}
                         </span>
                         {circuit.chip && (
@@ -443,13 +443,13 @@ export function InspectionPanel() {
                             onClick={() =>
                               setSelection({ kind: 'pin', pinNumber: targetPin.pinNumber })
                             }
-                            className="cursor-pointer font-mono text-[11px] text-[#35C2D1] hover:underline"
+                            className="cursor-pointer font-mono text-[11px] text-zinc-300 hover:text-white hover:underline"
                           >
                             Ir a Pin {targetPin.pinNumber}
                           </button>
                         )}
                       </div>
-                      <p className="text-[11px] text-[#AEB8C5]">
+                      <p className="text-[11px] text-zinc-400">
                         {getSignalWeightDescription(focusedChannel.signal)} · Terminales{' '}
                         {focusedChannel.inputHoleId} ↔ {focusedChannel.outputHoleId}.
                       </p>
@@ -470,37 +470,37 @@ export function InspectionPanel() {
                     return (
                       <div
                         key={ch.id}
-                        className={`flex items-center justify-between gap-2 rounded-md border px-2.5 py-1.5 text-xs ${
+                        className={`flex items-center justify-between gap-2 rounded-lg border px-2.5 py-1.5 text-xs transition-colors ${
                           isFocused
-                            ? 'border-[#F1B85A]/65 bg-[#141A23]'
-                            : 'border-[#2D3B4E] bg-[#141A23]'
+                            ? 'border-white bg-zinc-900 ring-1 ring-white/50'
+                            : 'border-zinc-800 bg-zinc-950/80'
                         }`}
                       >
                         <div className="min-w-0">
                           <div className="flex items-center gap-1.5">
-                            <span className="font-mono font-bold text-[#E9EDF2]">{ch.label}</span>
-                            <span className="font-mono text-[10px] text-[#AEB8C5]">
+                            <span className="font-mono font-bold text-white">{ch.label}</span>
+                            <span className="font-mono text-[10px] text-zinc-400">
                               → Pin {pinSpec.pinNumber}
                             </span>
                           </div>
-                          <span className="block font-mono text-[10px] text-[#AEB8C5]">
+                          <span className="block font-mono text-[10px] text-zinc-400">
                             {ch.inputHoleId} ↔ {ch.outputHoleId} ·{' '}
-                            <span className="text-[#6DD19C]">
+                            <span className="text-zinc-200">
                               {!solution.isPowerSupplyOn
                                 ? 'Fuente en STBY'
                                 : `Nivel ${outNet?.logicLevel ?? '—'}`}
                             </span>
                           </span>
                         </div>
-                        <div className="flex shrink-0 items-center gap-1">
+                        <div className="flex shrink-0 items-center gap-1.5">
                           <button
                             type="button"
                             onClick={() => toggleTracedSignal(ch.signal)}
                             title={`Resaltar ruta eléctrica de ${ch.signal}`}
-                            className={`cursor-pointer rounded border px-1.5 py-0.5 font-mono text-[10px] transition-colors ${
+                            className={`cursor-pointer rounded-lg border px-2 py-0.5 font-mono text-[10px] transition-colors ${
                               isChannelTraced
-                                ? 'border-[#35C2D1] bg-[#35C2D1]/20 text-[#35C2D1]'
-                                : 'border-[#2D3B4E] bg-[#1C2430] text-[#AEB8C5] hover:text-[#35C2D1]'
+                                ? 'border-white bg-white text-black font-semibold'
+                                : 'border-zinc-700 bg-zinc-900 text-zinc-300 hover:text-white hover:border-zinc-500'
                             }`}
                           >
                             Ruta
@@ -508,10 +508,10 @@ export function InspectionPanel() {
                           <button
                             type="button"
                             onClick={() => toggleSwitchState(ch.id)}
-                            className={`cursor-pointer rounded px-2 py-0.5 font-mono text-[11px] font-semibold transition-colors ${
+                            className={`cursor-pointer rounded-lg px-2.5 py-0.5 font-mono text-[11px] font-semibold transition-all ${
                               isOn
-                                ? 'bg-[#6DD19C]/20 text-[#6DD19C] ring-1 ring-[#6DD19C]/45'
-                                : 'bg-[#243041] text-[#AEB8C5] hover:text-[#E9EDF2]'
+                                ? 'border border-white bg-white text-black font-bold shadow-xs'
+                                : 'border border-zinc-800 bg-zinc-900 text-zinc-400 hover:text-white'
                             }`}
                           >
                             {isOn ? 'ON (1)' : 'OFF (0)'}
@@ -524,7 +524,7 @@ export function InspectionPanel() {
 
                 {renderRemoveComponentButton(comp.id, 'Retirar interruptor de la protoboard')}
 
-                <p className="rounded-md border border-[#2D3B4E] bg-[#141A23] p-2 text-[10px] leading-relaxed text-[#AEB8C5]">
+                <p className="rounded-lg border border-zinc-800 bg-zinc-950/70 p-2.5 text-[10px] leading-relaxed text-zinc-400">
                   Al cerrar un canal (ON) enlaza el contacto superior ({comp.channels[0]?.inputHoleId})
                   con el inferior ({comp.channels[0]?.outputHoleId}). Requiere +5 V y resistencia
                   pull-down en su pista de salida para definir niveles lógicos limpios.
@@ -537,37 +537,37 @@ export function InspectionPanel() {
             const netA = solution.terminalToNetId[comp.leadAHoleId] ?? '—';
             const netB = solution.terminalToNetId[comp.leadBHoleId] ?? '—';
             return (
-              <section className="space-y-3 rounded-lg border border-[#F1B85A]/40 bg-[#243041] p-3.5">
+              <section className="space-y-3 rounded-xl border border-zinc-800/80 bg-zinc-900/50 p-3.5 shadow-sm">
                 <div className="flex items-start justify-between gap-2">
                   <div>
-                    <span className="font-mono text-[11px] text-[#F1B85A]">
+                    <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-400">
                       RESISTENCIA AXIAL · {comp.formattedValue} ({comp.tolerance})
                     </span>
-                    <h3 className="text-sm font-semibold text-[#E9EDF2]">{comp.label}</h3>
+                    <h3 className="text-sm font-semibold text-white">{comp.label}</h3>
                   </div>
-                  <span className="rounded border border-[#2D3B4E] bg-[#141A23] px-2 py-0.5 font-mono text-[11px] text-[#35C2D1]">
+                  <span className="rounded-lg border border-zinc-700 bg-zinc-800 px-2 py-0.5 font-mono text-[11px] text-white">
                     {mode === 'mounted' ? comp.associatedSignal : `${comp.ohms} Ω`}
                   </span>
                 </div>
 
-                <div className="grid grid-cols-2 gap-2 rounded-md border border-[#2D3B4E] bg-[#141A23]/80 p-2.5 text-xs">
+                <div className="grid grid-cols-2 gap-2 rounded-lg border border-zinc-800/80 bg-zinc-950/80 p-2.5 text-xs">
                   <div>
-                    <span className="block text-[10px] uppercase text-[#AEB8C5]">Terminales</span>
-                    <span className="font-mono text-[#6DD19C]">
+                    <span className="block text-[10px] uppercase text-zinc-400">Terminales</span>
+                    <span className="font-mono text-white">
                       {comp.leadAHoleId} — {comp.leadBHoleId}
                     </span>
                   </div>
                   <div>
-                    <span className="block text-[10px] uppercase text-[#AEB8C5]">Uso nominal</span>
-                    <span className="font-medium text-[#E9EDF2]">
+                    <span className="block text-[10px] uppercase text-zinc-400">Uso nominal</span>
+                    <span className="font-medium text-zinc-200">
                       {comp.ohms === 330 ? 'Pull-down (330 Ω)' : 'Serie LED (1 kΩ)'}
                     </span>
                   </div>
                   <div className="col-span-2">
-                    <span className="block text-[10px] uppercase text-[#AEB8C5]">
+                    <span className="block text-[10px] uppercase text-zinc-400">
                       Redes enlazadas
                     </span>
-                    <span className="font-mono text-[11px] text-[#E9EDF2]">
+                    <span className="font-mono text-[11px] text-zinc-200">
                       {netA} ↔ {netB}
                     </span>
                   </div>
@@ -575,18 +575,18 @@ export function InspectionPanel() {
 
                 {mode === 'mounted' && renderTraceButton(comp.associatedSignal)}
 
-                <div className="rounded-md border border-[#2D3B4E] bg-[#141A23] px-2.5 py-2 text-[11px]">
-                  <span className="block text-[10px] uppercase text-[#AEB8C5]">
+                <div className="rounded-lg border border-zinc-800/80 bg-zinc-950/80 px-2.5 py-2 text-[11px]">
+                  <span className="block text-[10px] uppercase text-zinc-400">
                     Código de 4 bandas EIA
                   </span>
-                  <span className="font-mono text-[#E9EDF2]">
+                  <span className="font-mono text-zinc-200">
                     {comp.bands.map((b) => BAND_NAMES_ES[b]).join(' · ')}
                   </span>
                 </div>
 
                 {renderRemoveComponentButton(comp.id, 'Retirar resistencia de la protoboard')}
 
-                <p className="text-[11px] leading-relaxed text-[#AEB8C5]">{comp.technicalNote}</p>
+                <p className="text-[11px] leading-relaxed text-zinc-400">{comp.technicalNote}</p>
               </section>
             );
           }
@@ -596,34 +596,34 @@ export function InspectionPanel() {
             const drivingPin = getPinSpecBySignal(comp.signal);
 
             return (
-              <section className="space-y-3 rounded-lg border border-[#6DD19C]/45 bg-[#243041] p-3.5">
+              <section className="space-y-3 rounded-xl border border-zinc-800/80 bg-zinc-900/50 p-3.5 shadow-sm">
                 <div className="flex items-start justify-between gap-2">
                   <div>
-                    <span className="font-mono text-[11px] text-[#6DD19C]">
+                    <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-400">
                       DIODO LED 5 MM · {comp.color === 'AMBER' ? 'ÁMBAR' : 'VERDE'}
                     </span>
-                    <h3 className="text-sm font-semibold text-[#E9EDF2]">{comp.label}</h3>
+                    <h3 className="text-sm font-semibold text-white">{comp.label}</h3>
                   </div>
                   {mode === 'mounted' && (
-                    <span className="rounded border border-[#2D3B4E] bg-[#141A23] px-2 py-0.5 font-mono text-[11px] text-[#35C2D1]">
+                    <span className="rounded-lg border border-zinc-700 bg-zinc-800 px-2 py-0.5 font-mono text-[11px] text-white">
                       {comp.signal}
                     </span>
                   )}
                 </div>
 
-                <div className="grid grid-cols-2 gap-2 rounded-md border border-[#2D3B4E] bg-[#141A23]/80 p-2.5 text-xs">
+                <div className="grid grid-cols-2 gap-2 rounded-lg border border-zinc-800/80 bg-zinc-950/80 p-2.5 text-xs">
                   {mode === 'mounted' && (
                     <>
                       <div>
-                        <span className="block text-[10px] uppercase text-[#AEB8C5]">
+                        <span className="block text-[10px] uppercase text-zinc-400">
                           Peso binario
                         </span>
-                        <span className="font-medium text-[#E9EDF2]">
+                        <span className="font-medium text-zinc-200">
                           {getSignalWeightDescription(comp.signal)}
                         </span>
                       </div>
                       <div>
-                        <span className="block text-[10px] uppercase text-[#AEB8C5]">
+                        <span className="block text-[10px] uppercase text-zinc-400">
                           Pin conductor IC
                         </span>
                         <button
@@ -631,7 +631,7 @@ export function InspectionPanel() {
                           onClick={() =>
                             setSelection({ kind: 'pin', pinNumber: drivingPin.pinNumber })
                           }
-                          className="cursor-pointer font-mono font-semibold text-[#35C2D1] hover:underline"
+                          className="cursor-pointer font-mono font-semibold text-white hover:underline"
                         >
                           Pin {drivingPin.pinNumber} ({drivingPin.datasheetAlias})
                         </button>
@@ -639,26 +639,26 @@ export function InspectionPanel() {
                     </>
                   )}
                   <div>
-                    <span className="block text-[10px] uppercase text-[#AEB8C5]">Ánodo (+)</span>
-                    <span className="font-mono text-[#6DD19C]">
+                    <span className="block text-[10px] uppercase text-zinc-400">Ánodo (+)</span>
+                    <span className="font-mono text-white">
                       {comp.anodeHoleId} ({ledState?.anodeNetId ?? '—'})
                     </span>
                   </div>
                   <div>
-                    <span className="block text-[10px] uppercase text-[#AEB8C5]">
+                    <span className="block text-[10px] uppercase text-zinc-400">
                       Cátodo (− / bisel)
                     </span>
-                    <span className="font-mono text-[#E9EDF2]">
+                    <span className="font-mono text-zinc-300">
                       {comp.cathodeHoleId} ({ledState?.cathodeNetId ?? '—'})
                     </span>
                   </div>
                   <div className="col-span-2">
-                    <span className="block text-[10px] uppercase text-[#AEB8C5]">
+                    <span className="block text-[10px] uppercase text-zinc-400">
                       Estado resuelto por el motor
                     </span>
                     <span
                       className={`font-mono ${
-                        ledState?.isLit ? 'font-semibold text-[#6DD19C]' : 'text-[#F1B85A]'
+                        ledState?.isLit ? 'font-bold text-white' : 'text-zinc-400'
                       }`}
                     >
                       {ledState?.statusLabel ?? 'Sin evaluar'}
@@ -669,7 +669,7 @@ export function InspectionPanel() {
                 {mode === 'mounted' && renderTraceButton(comp.signal)}
                 {renderRemoveComponentButton(comp.id, 'Retirar LED de la protoboard')}
 
-                <p className="text-[11px] leading-relaxed text-[#AEB8C5]">{comp.technicalNote}</p>
+                <p className="text-[11px] leading-relaxed text-zinc-400">{comp.technicalNote}</p>
               </section>
             );
           }
@@ -682,34 +682,34 @@ export function InspectionPanel() {
             const gndFree = !occupied.has(comp.gndTerminalId);
 
             return (
-              <section className="space-y-3 rounded-lg border border-[#35C2D1]/45 bg-[#243041] p-3.5">
+              <section className="space-y-3 rounded-xl border border-zinc-800/80 bg-zinc-900/50 p-3.5 shadow-sm">
                 <div>
-                  <span className="font-mono text-[11px] text-[#35C2D1]">
+                  <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-400">
                     ALIMENTACIÓN DE LABORATORIO · +{comp.nominalVoltage}.0 V CC
                   </span>
-                  <h3 className="text-sm font-semibold text-[#E9EDF2]">{comp.label}</h3>
+                  <h3 className="text-sm font-semibold text-white">{comp.label}</h3>
                 </div>
 
-                <div className="grid grid-cols-2 gap-2 rounded-md border border-[#2D3B4E] bg-[#141A23]/80 p-2.5 text-xs">
+                <div className="grid grid-cols-2 gap-2 rounded-lg border border-zinc-800/80 bg-zinc-950/80 p-2.5 text-xs">
                   <div>
-                    <span className="block text-[10px] uppercase text-[#AEB8C5]">Borne +5 V</span>
-                    <span className="font-mono text-[#F06A6A]">{comp.plusTerminalId}</span>
-                    <span className="block font-mono text-[10px] text-[#AEB8C5]">{plusNet}</span>
+                    <span className="block text-[10px] uppercase text-zinc-400">Borne +5 V</span>
+                    <span className="font-mono text-white">{comp.plusTerminalId}</span>
+                    <span className="block font-mono text-[10px] text-zinc-400">{plusNet}</span>
                   </div>
                   <div>
-                    <span className="block text-[10px] uppercase text-[#AEB8C5]">Borne GND</span>
-                    <span className="font-mono text-[#7AA7E8]">{comp.gndTerminalId}</span>
-                    <span className="block font-mono text-[10px] text-[#AEB8C5]">{gndNet}</span>
+                    <span className="block text-[10px] uppercase text-zinc-400">Borne GND</span>
+                    <span className="font-mono text-zinc-300">{comp.gndTerminalId}</span>
+                    <span className="block font-mono text-[10px] text-zinc-400">{gndNet}</span>
                   </div>
                 </div>
 
                 {mode === 'guided' && (
-                  <div className="grid grid-cols-2 gap-1.5">
+                  <div className="grid grid-cols-2 gap-2">
                     <button
                       type="button"
                       disabled={!plusFree}
                       onClick={() => startWireDraft(comp.plusTerminalId)}
-                      className="cursor-pointer rounded border border-[#F06A6A]/50 bg-[#141A23] px-2 py-1.5 font-mono text-[10px] font-semibold text-[#F06A6A] hover:bg-[#243041] disabled:cursor-not-allowed disabled:opacity-45"
+                      className="cursor-pointer rounded-lg border border-zinc-700 bg-zinc-900 px-2 py-1.5 font-mono text-[10px] font-semibold text-white hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-40"
                     >
                       {plusFree ? 'Cablear desde +5 V' : 'Borne +5 V conectado'}
                     </button>
@@ -717,22 +717,22 @@ export function InspectionPanel() {
                       type="button"
                       disabled={!gndFree}
                       onClick={() => startWireDraft(comp.gndTerminalId)}
-                      className="cursor-pointer rounded border border-[#7AA7E8]/50 bg-[#141A23] px-2 py-1.5 font-mono text-[10px] font-semibold text-[#7AA7E8] hover:bg-[#243041] disabled:cursor-not-allowed disabled:opacity-45"
+                      className="cursor-pointer rounded-lg border border-zinc-700 bg-zinc-900 px-2 py-1.5 font-mono text-[10px] font-semibold text-zinc-300 hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-40"
                     >
                       {gndFree ? 'Cablear desde GND' : 'Borne GND conectado'}
                     </button>
                   </div>
                 )}
 
-                <div className="flex items-center justify-between rounded-md border border-[#2D3B4E] bg-[#141A23] px-3 py-2 text-xs">
-                  <span className="text-[#AEB8C5]">Salida regulada</span>
+                <div className="flex items-center justify-between rounded-lg border border-zinc-800 bg-zinc-950/80 px-3 py-2 text-xs">
+                  <span className="text-zinc-400">Salida regulada</span>
                   <button
                     type="button"
                     onClick={() => toggleSwitchState(comp.id)}
-                    className={`cursor-pointer rounded px-2.5 py-1 font-mono text-xs font-semibold transition-colors ${
+                    className={`cursor-pointer rounded-lg px-3 py-1 font-mono text-xs font-semibold transition-all ${
                       isOn
-                        ? 'bg-[#6DD19C]/20 text-[#6DD19C] ring-1 ring-[#6DD19C]/45'
-                        : 'bg-[#F1B85A]/20 text-[#F1B85A] ring-1 ring-[#F1B85A]/45'
+                        ? 'border border-white bg-white text-black shadow-xs font-bold'
+                        : 'border border-zinc-700 bg-zinc-900 text-zinc-400 hover:text-white'
                     }`}
                   >
                     {isOn ? 'ON (+5.00 V activo)' : 'STBY (En espera — clic para activar)'}
@@ -740,8 +740,8 @@ export function InspectionPanel() {
                 </div>
 
                 {!isOn && (
-                  <div className="rounded-md border border-[#F1B85A]/45 bg-[#F1B85A]/10 p-2.5 text-[11px] leading-relaxed text-[#E9EDF2]">
-                    <strong className="block font-semibold text-[#F1B85A]">
+                  <div className="rounded-lg border border-zinc-700 bg-zinc-950/90 p-2.5 text-[11px] leading-relaxed text-zinc-300">
+                    <strong className="block font-semibold text-white">
                       Fuente apagada (STBY)
                     </strong>
                     Sin +5.0 V en el Pin 5 (VCC), la circuitería interna TTL del SN74LS83A queda
@@ -750,12 +750,12 @@ export function InspectionPanel() {
                   </div>
                 )}
 
-                <div className="grid grid-cols-2 gap-1.5">
+                <div className="grid grid-cols-2 gap-2">
                   {renderTraceButton('VCC')}
                   {renderTraceButton('GND')}
                 </div>
 
-                <p className="text-[11px] leading-relaxed text-[#AEB8C5]">{comp.technicalNote}</p>
+                <p className="text-[11px] leading-relaxed text-zinc-400">{comp.technicalNote}</p>
               </section>
             );
           }
@@ -774,60 +774,60 @@ export function InspectionPanel() {
           const toHole = getHoleById(wire.toTerminalId);
 
           return (
-            <section className="space-y-3 rounded-lg border border-[#F1B85A]/45 bg-[#243041] p-3.5">
+            <section className="space-y-3 rounded-xl border border-zinc-800/80 bg-zinc-900/50 p-3.5 shadow-sm">
               <div className="flex items-start justify-between gap-2">
                 <div>
-                  <span className="font-mono text-[11px] text-[#F1B85A]">
+                  <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-400">
                     CABLE JUMPER · {wire.id}
                   </span>
-                  <h3 className="text-sm font-semibold text-[#E9EDF2]">{wire.label}</h3>
-                  <span className="text-[11px] text-[#AEB8C5]">
+                  <h3 className="text-sm font-semibold text-white">{wire.label}</h3>
+                  <span className="text-[11px] text-zinc-400">
                     {getWireCategoryDescription(wire.signal, wire.colorHex)}
                   </span>
                 </div>
                 <span
-                  className="mt-1 h-4 w-4 shrink-0 rounded-full border border-[#E9EDF2]/40"
+                  className="mt-1 h-4 w-4 shrink-0 rounded-full border border-white/40"
                   style={{ backgroundColor: wire.colorHex }}
                   title={`Color de aislamiento ${wire.colorHex}`}
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-2 rounded-md border border-[#2D3B4E] bg-[#141A23]/80 p-2.5 text-xs">
+              <div className="grid grid-cols-2 gap-2 rounded-lg border border-zinc-800/80 bg-zinc-950/80 p-2.5 text-xs">
                 <div>
-                  <span className="block text-[10px] uppercase text-[#AEB8C5]">
+                  <span className="block text-[10px] uppercase text-zinc-400">
                     Terminal origen
                   </span>
-                  <span className="font-mono font-semibold text-[#6DD19C]">
+                  <span className="font-mono font-semibold text-white">
                     {wire.fromTerminalId}
                   </span>
-                  <span className="block text-[10px] text-[#AEB8C5]">
+                  <span className="block text-[10px] text-zinc-400">
                     {fromHole ? `Pista ${fromHole.stripId}` : 'Borne de fuente'}
                   </span>
                 </div>
                 <div>
-                  <span className="block text-[10px] uppercase text-[#AEB8C5]">
+                  <span className="block text-[10px] uppercase text-zinc-400">
                     Terminal destino
                   </span>
-                  <span className="font-mono font-semibold text-[#6DD19C]">
+                  <span className="font-mono font-semibold text-white">
                     {wire.toTerminalId}
                   </span>
-                  <span className="block text-[10px] text-[#AEB8C5]">
+                  <span className="block text-[10px] text-zinc-400">
                     {toHole ? `Pista ${toHole.stripId}` : 'Borne de fuente'}
                   </span>
                 </div>
                 <div>
-                  <span className="block text-[10px] uppercase text-[#AEB8C5]">
+                  <span className="block text-[10px] uppercase text-zinc-400">
                     Red eléctrica
                   </span>
-                  <span className="font-mono font-semibold text-[#35C2D1]">
+                  <span className="font-mono font-semibold text-white">
                     {wireState?.netId ?? 'SIN-RED'}
                   </span>
                 </div>
                 <div>
-                  <span className="block text-[10px] uppercase text-[#AEB8C5]">
+                  <span className="block text-[10px] uppercase text-zinc-400">
                     Señal / Nivel
                   </span>
-                  <span className="font-mono text-[#E9EDF2]">
+                  <span className="font-mono text-zinc-200">
                     {wire.signal ?? '—'} ·{' '}
                     {wireState?.logicLevel === null || wireState?.logicLevel === undefined
                       ? 'STBY / —'
@@ -840,8 +840,8 @@ export function InspectionPanel() {
 
               {/* Acciones de edición en modo Montaje Editable */}
               {mode === 'guided' && (
-                <div className="space-y-2 rounded-md border border-[#2D3B4E] bg-[#141A23] p-2.5">
-                  <span className="block font-mono text-[10px] uppercase text-[#AEB8C5]">
+                <div className="space-y-2 rounded-lg border border-zinc-800 bg-zinc-950/80 p-2.5">
+                  <span className="block font-mono text-[10px] uppercase text-zinc-400">
                     Color visual (no altera conectividad)
                   </span>
                   <div className="flex flex-wrap gap-1.5">
@@ -855,8 +855,8 @@ export function InspectionPanel() {
                           title={`${opt.label} (${opt.conventionEs})`}
                           className={`flex h-6 w-6 cursor-pointer items-center justify-center rounded-full border transition-transform ${
                             active
-                              ? 'scale-110 border-[#E9EDF2] ring-2 ring-[#35C2D1]'
-                              : 'border-[#2D3B4E] hover:scale-105'
+                              ? 'scale-110 border-white ring-2 ring-white/50'
+                              : 'border-zinc-700 hover:scale-105'
                           }`}
                           style={{ backgroundColor: opt.colorHex }}
                         />
@@ -868,14 +868,14 @@ export function InspectionPanel() {
                     <button
                       type="button"
                       onClick={() => beginWireReconnect(wire.id, 'from')}
-                      className="cursor-pointer rounded border border-[#2D3B4E] bg-[#243041] px-2 py-1 font-mono text-[10px] font-medium text-[#35C2D1] hover:border-[#35C2D1]/60"
+                      className="cursor-pointer rounded-lg border border-zinc-700 bg-zinc-900 px-2 py-1 font-mono text-[10px] font-medium text-white hover:border-zinc-500"
                     >
                       Mover destino
                     </button>
                     <button
                       type="button"
                       onClick={() => beginWireReconnect(wire.id, 'to')}
-                      className="cursor-pointer rounded border border-[#2D3B4E] bg-[#243041] px-2 py-1 font-mono text-[10px] font-medium text-[#35C2D1] hover:border-[#35C2D1]/60"
+                      className="cursor-pointer rounded-lg border border-zinc-700 bg-zinc-900 px-2 py-1 font-mono text-[10px] font-medium text-white hover:border-zinc-500"
                     >
                       Mover origen
                     </button>
@@ -884,7 +884,7 @@ export function InspectionPanel() {
                   <button
                     type="button"
                     onClick={() => deleteWire(wire.id)}
-                    className="w-full cursor-pointer rounded border border-[#F06A6A]/50 bg-[#2A171D] px-2 py-1 font-mono text-[11px] font-semibold text-[#F06A6A] hover:border-[#F06A6A] hover:bg-[#381D26]"
+                    className="w-full cursor-pointer rounded-lg border border-zinc-600 bg-zinc-900 px-2 py-1 font-mono text-[11px] font-semibold text-white hover:bg-zinc-800"
                   >
                     Eliminar cable (Supr)
                   </button>
@@ -892,17 +892,17 @@ export function InspectionPanel() {
               )}
 
               {net && (
-                <div className="space-y-1.5 rounded-md border border-[#2D3B4E] bg-[#141A23] p-2.5 text-[11px]">
+                <div className="space-y-1.5 rounded-lg border border-zinc-800 bg-zinc-950/80 p-2.5 text-[11px]">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] uppercase text-[#AEB8C5]">Conducción de red</span>
-                    <span className="font-mono text-[#6DD19C]">{net.summaryLabel}</span>
+                    <span className="text-[10px] uppercase text-zinc-400">Conducción de red</span>
+                    <span className="font-mono text-white">{net.summaryLabel}</span>
                   </div>
                   {net.connectedComponentLabels.length > 0 && (
                     <div>
-                      <span className="block text-[10px] uppercase text-[#AEB8C5]">
+                      <span className="block text-[10px] uppercase text-zinc-400">
                         Terminales enlazados en {net.id}
                       </span>
-                      <ul className="mt-1 space-y-0.5 font-mono text-[10px] text-[#E9EDF2]">
+                      <ul className="mt-1 space-y-0.5 font-mono text-[10px] text-zinc-300">
                         {net.connectedComponentLabels.map((lbl) => (
                           <li key={lbl}>· {lbl}</li>
                         ))}
@@ -928,13 +928,13 @@ export function InspectionPanel() {
           const isHoleFree = hole ? !occupied.has(hole.id) : false;
 
           return (
-            <section className="space-y-3 rounded-lg border border-[#35C2D1]/40 bg-[#243041] p-3.5">
+            <section className="space-y-3 rounded-xl border border-zinc-800/80 bg-zinc-900/50 p-3.5 shadow-sm">
               <div className="flex items-start justify-between gap-2">
                 <div>
-                  <span className="font-mono text-[11px] text-[#35C2D1]">
+                  <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-400">
                     PROTOBOARD · MB-102 (830 PUNTOS)
                   </span>
-                  <h3 className="text-sm font-semibold text-[#E9EDF2]">
+                  <h3 className="text-sm font-semibold text-white">
                     {hole ? hole.label : 'Matriz de conexiones sin soldadura'}
                   </h3>
                 </div>
@@ -942,31 +942,31 @@ export function InspectionPanel() {
 
               {hole ? (
                 <>
-                  <div className="grid grid-cols-2 gap-2 rounded-md border border-[#2D3B4E] bg-[#141A23]/80 p-2.5 text-xs">
+                  <div className="grid grid-cols-2 gap-2 rounded-lg border border-zinc-800/80 bg-zinc-950/80 p-2.5 text-xs">
                     <div>
-                      <span className="block text-[10px] uppercase text-[#AEB8C5]">
+                      <span className="block text-[10px] uppercase text-zinc-400">
                         Tipo de contacto
                       </span>
-                      <span className="font-medium text-[#E9EDF2]">
+                      <span className="font-medium text-zinc-200">
                         {hole.kind === 'terminal' ? 'Pista vertical (5 nodos)' : 'Bus de alimentación'}
                       </span>
                     </div>
                     <div>
-                      <span className="block text-[10px] uppercase text-[#AEB8C5]">
+                      <span className="block text-[10px] uppercase text-zinc-400">
                         Disponibilidad
                       </span>
                       <span
-                        className={`font-mono ${isHoleFree ? 'text-[#6DD19C]' : 'text-[#F1B85A]'}`}
+                        className={`font-mono ${isHoleFree ? 'text-white font-bold' : 'text-zinc-400'}`}
                       >
                         {isHoleFree ? `Libre (${peers.length} en pista)` : 'Ocupado'}
                       </span>
                     </div>
                     {net && (
                       <div className="col-span-2">
-                        <span className="block text-[10px] uppercase text-[#AEB8C5]">
+                        <span className="block text-[10px] uppercase text-zinc-400">
                           Red eléctrica resuelta
                         </span>
-                        <span className="font-mono text-[11px] text-[#35C2D1]">
+                        <span className="font-mono text-[11px] text-white">
                           {net.id} · {net.summaryLabel}
                         </span>
                       </div>
@@ -977,18 +977,18 @@ export function InspectionPanel() {
                     <button
                       type="button"
                       onClick={() => startWireDraft(hole.id)}
-                      className="w-full cursor-pointer rounded-md border border-[#35C2D1]/55 bg-[#35C2D1]/15 px-2.5 py-1.5 font-mono text-xs font-semibold text-[#35C2D1] transition-colors hover:bg-[#35C2D1]/25"
+                      className="w-full cursor-pointer rounded-xl border border-white bg-white px-3 py-2 font-mono text-xs font-bold text-black shadow-xs hover:bg-zinc-200"
                     >
                       Iniciar cable desde {hole.id}
                     </button>
                   )}
 
                   {insertedPin ? (
-                    <div className="space-y-2 rounded-md border border-[#F1B85A]/35 bg-[#141A23] p-2.5 text-xs">
+                    <div className="space-y-2 rounded-lg border border-zinc-700 bg-zinc-950/80 p-2.5 text-xs">
                       <div className="flex items-center justify-between">
-                        <span className="text-[#AEB8C5]">
+                        <span className="text-zinc-400">
                           Comparte pista con{' '}
-                          <strong className="text-[#E9EDF2]">
+                          <strong className="text-white">
                             Pin {insertedPin.spec.pinNumber} ({insertedPin.spec.signal})
                           </strong>
                         </span>
@@ -997,7 +997,7 @@ export function InspectionPanel() {
                           onClick={() =>
                             setSelection({ kind: 'pin', pinNumber: insertedPin.spec.pinNumber })
                           }
-                          className="cursor-pointer font-mono text-[11px] text-[#35C2D1] hover:underline"
+                          className="cursor-pointer font-mono text-[11px] text-zinc-300 hover:text-white hover:underline"
                         >
                           Inspeccionar
                         </button>
@@ -1005,7 +1005,7 @@ export function InspectionPanel() {
                       {renderTraceButton(insertedPin.spec.signal)}
                     </div>
                   ) : (
-                    <p className="text-xs leading-relaxed text-[#AEB8C5]">
+                    <p className="text-xs leading-relaxed text-zinc-400">
                       {hole.kind === 'terminal'
                         ? 'Los 5 alvéolos de esta columna y semibloque comparten un único clip elástico interno, quedando aislados del lado opuesto por el canal central de 7.62 mm.'
                         : 'Este riel distribuye alimentación continua a lo largo de 50 puntos para nutrir VCC (+5 V) o referencia GND (0 V).'}
@@ -1013,9 +1013,9 @@ export function InspectionPanel() {
                   )}
                 </>
               ) : (
-                <p className="text-xs leading-relaxed text-[#AEB8C5]">
-                  Consta de 63 columnas dobles (filas <code className="text-[#E9EDF2]">a–e</code> y{' '}
-                  <code className="text-[#E9EDF2]">f–j</code>) separadas por una ranura central
+                <p className="text-xs leading-relaxed text-zinc-400">
+                  Consta de 63 columnas dobles (filas <code className="text-white">a–e</code> y{' '}
+                  <code className="text-white">f–j</code>) separadas por una ranura central
                   estándar de 0.3&quot; para circuitos DIP, más 4 buses laterales de alimentación.
                 </p>
               )}
@@ -1031,52 +1031,52 @@ export function InspectionPanel() {
 
         {/* Resumen en vivo del Circuito de Trabajo en modo Montaje Editable */}
         {mode === 'guided' && (
-          <section className="space-y-2.5 rounded-lg border border-[#35C2D1]/35 bg-[#243041]/85 p-3.5">
+          <section className="space-y-2.5 rounded-xl border border-zinc-800/80 bg-zinc-900/50 p-3.5 shadow-sm">
             <div className="flex items-center justify-between gap-2">
-              <h3 className="text-xs font-semibold uppercase tracking-wider text-[#35C2D1]">
+              <h3 className="text-xs font-semibold uppercase tracking-wider text-white">
                 Inventario Montado en Protoboard
               </h3>
               <span
-                className={`rounded px-1.5 py-0.5 font-mono text-[10px] font-semibold ${
+                className={`rounded-lg px-2 py-0.5 font-mono text-[10px] font-semibold ${
                   isEquivalentToReference
-                    ? 'bg-[#6DD19C]/20 text-[#6DD19C]'
-                    : 'bg-[#141A23] text-[#AEB8C5]'
+                    ? 'border border-white bg-white text-black font-bold'
+                    : 'border border-zinc-800 bg-zinc-950 text-zinc-400'
                 }`}
               >
                 {isEquivalentToReference ? 'Circuito completo verificado' : 'En construcción'}
               </span>
             </div>
 
-            <div className="grid grid-cols-5 gap-1.5 rounded-md border border-[#2D3B4E] bg-[#141A23] p-2 text-center font-mono text-[10px]">
+            <div className="grid grid-cols-5 gap-1.5 rounded-lg border border-zinc-800/80 bg-zinc-950/80 p-2 text-center font-mono text-[10px]">
               <div>
-                <span className="block text-[#AEB8C5]">IC</span>
-                <strong className="text-xs text-[#E9EDF2]">{circuit.chip ? '1/1' : '0/1'}</strong>
+                <span className="block text-zinc-400">IC</span>
+                <strong className="text-xs text-white">{circuit.chip ? '1/1' : '0/1'}</strong>
               </div>
               <div>
-                <span className="block text-[#AEB8C5]">DIP</span>
-                <strong className="text-xs text-[#E9EDF2]">
+                <span className="block text-zinc-400">DIP</span>
+                <strong className="text-xs text-white">
                   {circuit.dipSwitches.length}/3
                 </strong>
               </div>
               <div>
-                <span className="block text-[#AEB8C5]">Res.</span>
-                <strong className="text-xs text-[#E9EDF2]">
+                <span className="block text-zinc-400">Res.</span>
+                <strong className="text-xs text-white">
                   {circuit.resistors.length}/14
                 </strong>
               </div>
               <div>
-                <span className="block text-[#AEB8C5]">LED</span>
-                <strong className="text-xs text-[#E9EDF2]">{circuit.leds.length}/5</strong>
+                <span className="block text-zinc-400">LED</span>
+                <strong className="text-xs text-white">{circuit.leds.length}/5</strong>
               </div>
               <div>
-                <span className="block text-[#AEB8C5]">Cables</span>
-                <strong className="text-xs text-[#35C2D1]">{circuit.wires.length}</strong>
+                <span className="block text-zinc-400">Cables</span>
+                <strong className="text-xs text-white">{circuit.wires.length}</strong>
               </div>
             </div>
 
             {isEquivalentToReference && (
-              <div className="rounded-md border border-[#6DD19C]/45 bg-[#152822] p-2.5 text-[11px] leading-relaxed text-[#E9EDF2]">
-                <strong className="block font-semibold text-[#6DD19C]">
+              <div className="rounded-lg border border-zinc-600 bg-zinc-900 p-2.5 text-[11px] leading-relaxed text-zinc-200">
+                <strong className="block font-semibold text-white">
                   Equivalencia eléctrica confirmada
                 </strong>
                 La netlist que has armado reproduce con exactitud todas las redes de alimentación,
@@ -1089,41 +1089,39 @@ export function InspectionPanel() {
 
         {/* Resumen del 74LS83A y diagnósticos estructurados del motor */}
         {(!hasSpecificSelection || !solution.isHealthy) && (
-          <section className="space-y-3 rounded-lg border border-[#2D3B4E] bg-[#243041] p-3.5">
+          <section className="space-y-3 rounded-xl border border-zinc-800/80 bg-zinc-900/50 p-3.5 shadow-sm">
             <div>
-              <span className="font-mono text-[11px] text-[#35C2D1]">
+              <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-400">
                 CIRCUITO INTEGRADO PROTAGONISTA
               </span>
-              <h3 className="text-sm font-semibold text-[#E9EDF2]">
+              <h3 className="text-sm font-semibold text-white">
                 {CHIP_74LS83_PLACEMENT.partNumber} ({CHIP_74LS83_PLACEMENT.shortName})
               </h3>
             </div>
 
             {!hasSpecificSelection && (
-              <p className="text-xs leading-relaxed text-[#E9EDF2]">
+              <p className="text-xs leading-relaxed text-zinc-300">
                 Sumador binario completo de 4 bits con acarreo anticipado interno (
                 <em>Look-Ahead Carry</em>). Suma dos palabras de 4 bits (
-                <code className="font-mono text-[#35C2D1]">A3..A0</code> y{' '}
-                <code className="font-mono text-[#35C2D1]">B3..B0</code>) más un acarreo inicial{' '}
-                <code className="font-mono text-[#F1B85A]">C0</code>, entregando la suma{' '}
-                <code className="font-mono text-[#6DD19C]">S3..S0</code> y acarreo final{' '}
-                <code className="font-mono text-[#6DD19C]">C4</code>.
+                <code className="font-mono text-white bg-zinc-800 px-1 py-0.5 rounded border border-zinc-700">A3..A0</code> y{' '}
+                <code className="font-mono text-white bg-zinc-800 px-1 py-0.5 rounded border border-zinc-700">B3..B0</code>) más un acarreo inicial{' '}
+                <code className="font-mono text-white bg-zinc-800 px-1 py-0.5 rounded border border-zinc-700">C0</code>, entregando la suma{' '}
+                <code className="font-mono text-white bg-zinc-800 px-1 py-0.5 rounded border border-zinc-700">S3..S0</code> y acarreo final{' '}
+                <code className="font-mono text-white bg-zinc-800 px-1 py-0.5 rounded border border-zinc-700">C4</code>.
               </p>
             )}
 
             {/* Diagnóstico eléctrico en tiempo real */}
-            <div className="space-y-1.5 rounded-md border border-[#2D3B4E] bg-[#141A23] p-2.5 text-[11px]">
+            <div className="space-y-1.5 rounded-lg border border-zinc-800/80 bg-zinc-950/80 p-2.5 text-[11px]">
               <div className="flex items-center justify-between">
-                <span className="font-mono text-[10px] uppercase text-[#AEB8C5]">
+                <span className="font-mono text-[10px] uppercase text-zinc-400">
                   Diagnóstico del motor eléctrico
                 </span>
                 <span
                   className={`font-mono text-[10px] font-semibold ${
                     solution.isHealthy
-                      ? 'text-[#6DD19C]'
-                      : solution.diagnostics.some((d) => d.severity === 'ERROR')
-                        ? 'text-[#F06A6A]'
-                        : 'text-[#F1B85A]'
+                      ? 'text-white'
+                      : 'text-zinc-200'
                   }`}
                 >
                   {solution.isHealthy
@@ -1133,7 +1131,7 @@ export function InspectionPanel() {
               </div>
 
               {solution.diagnostics.length === 0 ? (
-                <p className="text-[11px] text-[#AEB8C5]">
+                <p className="text-[11px] text-zinc-400">
                   Alimentación +5.0 V en Pin 5, GND en Pin 12, 9 entradas polarizadas y 5 etapas
                   LED conducidas sin errores.
                 </p>
@@ -1142,14 +1140,10 @@ export function InspectionPanel() {
                   {solution.diagnostics.map((diag, idx) => (
                     <li
                       key={`${diag.code}-${idx}`}
-                      className={`rounded border px-2 py-1 ${
-                        diag.severity === 'ERROR'
-                          ? 'border-[#F06A6A]/40 bg-[#F06A6A]/10 text-[#E9EDF2]'
-                          : 'border-[#F1B85A]/35 bg-[#F1B85A]/10 text-[#E9EDF2]'
-                      }`}
+                      className="rounded-lg border border-zinc-700 bg-zinc-900 px-2 py-1 text-zinc-200"
                     >
-                      <strong className="block font-semibold">{diag.title}</strong>
-                      <span className="text-[10px] text-[#AEB8C5]">{diag.message}</span>
+                      <strong className="block font-semibold text-white">{diag.title}</strong>
+                      <span className="text-[10px] text-zinc-400">{diag.message}</span>
                     </li>
                   ))}
                 </ul>
@@ -1157,15 +1151,15 @@ export function InspectionPanel() {
             </div>
 
             {!hasSpecificSelection && (
-              <div className="rounded-md border border-[#F1B85A]/35 bg-[#141A23] p-2.5 text-[11px] leading-relaxed text-[#AEB8C5]">
-                <strong className="block font-semibold text-[#F1B85A]">
+              <div className="rounded-lg border border-zinc-700 bg-zinc-950/80 p-2.5 text-[11px] leading-relaxed text-zinc-400">
+                <strong className="block font-semibold text-white">
                   Nota crítica de patillaje (74LS83A ≠ 74LS283)
                 </strong>
-                En el 74LS83A, <strong className="text-[#E9EDF2]">VCC (+5 V) está en el Pin 5</strong>{' '}
-                y <strong className="text-[#E9EDF2]">GND en el Pin 12</strong>. Con muesca a la
-                izquierda en columna <code className="font-mono text-[#E9EDF2]">c</code>, Pin 5 cae
-                en <code className="font-mono text-[#E9EDF2]">f(c+4)</code> y Pin 12 en{' '}
-                <code className="font-mono text-[#E9EDF2]">e(c+4)</code>.
+                En el 74LS83A, <strong className="text-white">VCC (+5 V) está en el Pin 5</strong>{' '}
+                y <strong className="text-white">GND en el Pin 12</strong>. Con muesca a la
+                izquierda en columna <code className="font-mono text-white">c</code>, Pin 5 cae
+                en <code className="font-mono text-white">f(c+4)</code> y Pin 12 en{' '}
+                <code className="font-mono text-white">e(c+4)</code>.
               </div>
             )}
           </section>

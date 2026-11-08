@@ -91,13 +91,13 @@ export function App() {
   }, []);
 
   return (
-    <div className="flex h-screen w-screen flex-col overflow-hidden bg-[#10141B] text-[#E9EDF2]">
+    <div className="flex h-screen w-screen flex-col overflow-hidden bg-black text-zinc-100 p-2 sm:p-2.5 gap-2 sm:gap-2.5">
       <TopBar />
       <EditorToolbar />
 
-      <div className="flex min-h-0 flex-1 overflow-hidden">
-        <main className="flex min-w-0 flex-1 flex-col overflow-hidden">
-          <div className="relative min-h-0 flex-1">
+      <div className="flex min-h-0 flex-1 gap-2 sm:gap-2.5 overflow-hidden">
+        <main className="flex min-w-0 flex-1 flex-col gap-2 sm:gap-2.5 overflow-hidden">
+          <div className="relative min-h-0 flex-1 rounded-2xl overflow-hidden border border-zinc-800/80 bg-zinc-950 shadow-inner">
             <ErrorBoundary fallbackTitle="Error en el entorno 3D WebGL">
               <LabCanvas />
             </ErrorBoundary>
