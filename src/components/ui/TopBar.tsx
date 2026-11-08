@@ -1,15 +1,48 @@
+import { useRef, useState } from 'react';
 import { useCircuitSolution } from '../../store/useCircuitSolution';
 import { useLabStore } from '../../store/useLabStore';
 
 export function TopBar() {
   const mode = useLabStore((s) => s.mode);
   const setMode = useLabStore((s) => s.setMode);
+  const isGuidedUnlocked = useLabStore((s) => s.isGuidedUnlocked);
+  const toggleGuidedUnlocked = useLabStore((s) => s.toggleGuidedUnlocked);
   const resetCamera = useLabStore((s) => s.resetCamera);
   const setHelpModalOpen = useLabStore((s) => s.setHelpModalOpen);
   const isSidebarOpen = useLabStore((s) => s.isSidebarOpen);
   const toggleSidebar = useLabStore((s) => s.toggleSidebar);
   const togglePowerSupply = useLabStore((s) => s.togglePowerSupply);
   const solution = useCircuitSolution();
+
+  const clickCountRef = useRef(0);
+  const lastClickTimeRef = useRef(0);
+  const [unlockFeedback, setUnlockFeedback] = useState<string | null>(null);
+
+  const handleCircuitoMontadoClick = () => {
+    setMode('mounted');
+
+    const now = Date.now();
+    if (now - lastClickTimeRef.current > 2500) {
+      clickCountRef.current = 1;
+    } else {
+      clickCountRef.current += 1;
+    }
+    lastClickTimeRef.current = now;
+
+    if (clickCountRef.current >= 5) {
+      clickCountRef.current = 0;
+      const willBeUnlocked = !isGuidedUnlocked;
+      toggleGuidedUnlocked();
+      setUnlockFeedback(
+        willBeUnlocked
+          ? '✨ Modo Montaje Guiado desbloqueado'
+          : 'Modo Montaje Guiado ocultado',
+      );
+      window.setTimeout(() => {
+        setUnlockFeedback(null);
+      }, 3000);
+    }
+  };
 
   const firstError = solution.diagnostics.find((d) => d.severity === 'ERROR');
   const firstWarning = solution.diagnostics.find((d) => d.severity === 'WARNING');
@@ -67,33 +100,54 @@ export function TopBar() {
       </div>
 
       {/* Selector de modo */}
-      <nav
-        aria-label="Modo del simulador"
-        className="flex items-center rounded-lg border border-[#2D3B4E] bg-[#10141B] p-0.5"
-      >
-        <button
-          type="button"
-          onClick={() => setMode('mounted')}
-          className={`cursor-pointer rounded-md px-3 py-1 text-xs font-medium transition-colors ${
-            mode === 'mounted'
-              ? 'bg-[#243041] text-[#35C2D1] shadow-xs ring-1 ring-[#35C2D1]/40'
-              : 'text-[#AEB8C5] hover:text-[#E9EDF2]'
-          }`}
+      <div className="relative">
+        <nav
+          aria-label="Modo del simulador"
+          className="flex items-center rounded-lg border border-[#2D3B4E] bg-[#10141B] p-0.5"
         >
-          Circuito montado
-        </button>
-        <button
-          type="button"
-          onClick={() => setMode('guided')}
-          className={`cursor-pointer rounded-md px-3 py-1 text-xs font-medium transition-colors ${
-            mode === 'guided'
-              ? 'bg-[#243041] text-[#35C2D1] shadow-xs ring-1 ring-[#35C2D1]/40'
-              : 'text-[#AEB8C5] hover:text-[#E9EDF2]'
-          }`}
-        >
-          Montaje guiado
-        </button>
-      </nav>
+          <button
+            type="button"
+            onClick={handleCircuitoMontadoClick}
+            aria-current={mode === 'mounted' ? 'page' : undefined}
+            title={
+              isGuidedUnlocked
+                ? 'Modo Circuito montado'
+                : 'Circuito montado'
+            }
+            className={`cursor-pointer rounded-md px-3 py-1 text-xs font-medium transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-[#35C2D1] ${
+              mode === 'mounted'
+                ? 'bg-[#243041] text-[#35C2D1] shadow-xs ring-1 ring-[#35C2D1]/40'
+                : 'text-[#AEB8C5] hover:text-[#E9EDF2]'
+            }`}
+          >
+            Circuito montado
+          </button>
+          {isGuidedUnlocked && (
+            <button
+              type="button"
+              onClick={() => setMode('guided')}
+              aria-current={mode === 'guided' ? 'page' : undefined}
+              className={`cursor-pointer rounded-md px-3 py-1 text-xs font-medium transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-[#35C2D1] ${
+                mode === 'guided'
+                  ? 'bg-[#243041] text-[#35C2D1] shadow-xs ring-1 ring-[#35C2D1]/40'
+                  : 'text-[#AEB8C5] hover:text-[#E9EDF2]'
+              }`}
+            >
+              Montaje guiado
+            </button>
+          )}
+        </nav>
+
+        {unlockFeedback && (
+          <div
+            role="status"
+            aria-live="polite"
+            className="pointer-events-none absolute top-full left-1/2 z-50 mt-2 -translate-x-1/2 whitespace-nowrap rounded-md border border-[#35C2D1]/50 bg-[#141A23] px-2.5 py-1 text-[11px] font-medium text-[#35C2D1] shadow-lg shadow-black/40"
+          >
+            {unlockFeedback}
+          </div>
+        )}
+      </div>
 
       {/* Indicador en vivo de estado del motor eléctrico y utilidades */}
       <div className="flex items-center gap-2">

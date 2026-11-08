@@ -34,8 +34,12 @@ interface JumperWire3DProps {
 export function JumperWire3D({ descriptor, obstacles }: JumperWire3DProps) {
   const mode = useLabStore((s) => s.mode);
   const activeTool = useLabStore((s) => s.activeTool);
-  const selection = useLabStore((s) => s.selection);
-  const hovered = useLabStore((s) => s.hovered);
+  const isSelected = useLabStore(
+    (s) => s.selection.kind === 'wire' && s.selection.wireId === descriptor.id,
+  );
+  const isHovered = useLabStore(
+    (s) => s.hovered.kind === 'wire' && s.hovered.wireId === descriptor.id,
+  );
   const setSelection = useLabStore((s) => s.setSelection);
   const setHovered = useLabStore((s) => s.setHovered);
   const deleteWire = useLabStore((s) => s.deleteWire);
@@ -84,8 +88,6 @@ export function JumperWire3D({ descriptor, obstacles }: JumperWire3DProps) {
     mode === 'mounted' || activeTool === 'select' || activeTool === 'remove';
   const isRemoveMode = mode === 'guided' && activeTool === 'remove';
 
-  const isSelected = selection.kind === 'wire' && selection.wireId === descriptor.id;
-  const isHovered = hovered.kind === 'wire' && hovered.wireId === descriptor.id;
   const isInTracedPath = signalTrace ? signalTrace.wireIds.has(descriptor.id) : false;
   const isDimmedByTrace =
     signalTrace !== null && !isInTracedPath && !isSelected && !isHovered;
@@ -151,7 +153,7 @@ export function JumperWire3D({ descriptor, obstacles }: JumperWire3DProps) {
         if (!interactiveInScene) {
           return;
         }
-        if (hovered.kind === 'wire' && hovered.wireId === descriptor.id) {
+        if (isHovered) {
           setHovered({ kind: 'none' });
         }
       }}

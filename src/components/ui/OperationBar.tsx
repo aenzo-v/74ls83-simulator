@@ -114,6 +114,7 @@ export function OperationBar() {
         type="button"
         disabled={!isMounted}
         aria-pressed={isSwitchOn}
+        aria-label={`Entrada ${spec.signal}, nivel ${isSwitchOn ? '1 lógico (alto)' : '0 lógico (bajo)'}`}
         onClick={() => {
           toggleSwitchState(spec.channelId);
           setSelection({
@@ -127,7 +128,7 @@ export function OperationBar() {
             ? `Conmutar interruptor ${spec.signal} (${isSwitchOn ? 'ON = 1' : 'OFF = 0'}) · Pin ${spec.pin} (${pinState?.netId ?? 'sin red'})`
             : `Coloca primero el interruptor ${spec.componentId} sobre la protoboard`
         }
-        className={`group relative flex h-12 min-w-11 flex-col items-center justify-center rounded-md border px-2.5 py-1 transition-all ${
+        className={`group relative flex h-12 min-w-11 flex-col items-center justify-center rounded-md border px-2.5 py-1 transition-all focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-[#35C2D1] ${
           !isMounted
             ? 'cursor-not-allowed border-[#253142] bg-[#141A23]/50 text-[#AEB8C5]/45'
             : isSwitchOn
@@ -179,6 +180,7 @@ export function OperationBar() {
       <button
         key={spec.ledId}
         type="button"
+        aria-label={`Salida LED ${spec.signal}, valor ${bitText}, ${isLit ? 'encendido' : 'apagado'}`}
         onClick={() => {
           if (isLedMounted) {
             setSelection({ kind: 'component', componentId: spec.ledId });
@@ -191,7 +193,7 @@ export function OperationBar() {
             ? `Inspeccionar salida ${spec.signal} (Pin ${spec.pin} · ${ledState?.statusLabel ?? 'Sin evaluar'})`
             : `Salida ${spec.signal} (Pin ${spec.pin}) · LED aún no colocado`
         }
-        className={`relative flex h-12 min-w-11 cursor-pointer flex-col items-center justify-center rounded-md border px-2.5 py-1 transition-all ${
+        className={`relative flex h-12 min-w-11 cursor-pointer flex-col items-center justify-center rounded-md border px-2.5 py-1 transition-all focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-[#35C2D1] ${
           isLit
             ? litClasses
             : resolvedBit === 0
@@ -439,7 +441,11 @@ export function OperationBar() {
               </div>
             </div>
           ) : (
-            <div className="flex max-w-md items-center justify-between gap-3 rounded-lg border border-[#F1B85A]/55 bg-[#141A23] px-3.5 py-2">
+            <div
+              role="status"
+              aria-live="polite"
+              className="flex max-w-md items-center justify-between gap-3 rounded-lg border border-[#F1B85A]/55 bg-[#141A23] px-3.5 py-2"
+            >
               <div className="min-w-0">
                 <div className="font-mono text-xs font-semibold text-[#F1B85A]">
                   {!isPsuOn

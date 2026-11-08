@@ -18,8 +18,16 @@ const CHIP_PARTING_Y = CHIP_BASE_Y + CHIP_HEIGHT_Y * 0.5;
 export function DipChip74LS83() {
   const mode = useLabStore((s) => s.mode);
   const activeTool = useLabStore((s) => s.activeTool);
-  const selection = useLabStore((s) => s.selection);
-  const hovered = useLabStore((s) => s.hovered);
+  const isChipSelected = useLabStore((s) => s.selection.kind === 'chip');
+  const isChipHovered = useLabStore((s) => s.hovered.kind === 'chip');
+  const selectedPinNumber = useLabStore((s) =>
+    s.selection.kind === 'pin' ? s.selection.pinNumber : null,
+  );
+  const hoveredPinNumber = useLabStore((s) =>
+    s.hovered.kind === 'pin' ? s.hovered.pinNumber : null,
+  );
+  const activePinNumber: PinNumber | undefined =
+    hoveredPinNumber ?? selectedPinNumber ?? undefined;
   const setSelection = useLabStore((s) => s.setSelection);
   const setHovered = useLabStore((s) => s.setHovered);
   const requestComponentRemoval = useLabStore((s) => s.requestComponentRemoval);
@@ -40,13 +48,6 @@ export function DipChip74LS83() {
     () => (chip ? getChipMountedTerminalsForColumn(chip.startColumn) : []),
     [chip],
   );
-
-  const activePinNumber: PinNumber | undefined =
-    hovered.kind === 'pin'
-      ? hovered.pinNumber
-      : selection.kind === 'pin'
-        ? selection.pinNumber
-        : undefined;
 
   const activeMountedPin = useMemo(
     () =>
@@ -69,9 +70,6 @@ export function DipChip74LS83() {
   const interactiveInScene =
     mode === 'mounted' || activeTool === 'select' || activeTool === 'remove';
   const isRemoveMode = mode === 'guided' && activeTool === 'remove';
-
-  const isChipSelected = selection.kind === 'chip';
-  const isChipHovered = hovered.kind === 'chip';
 
   const handleChipClick = (event: ThreeEvent<MouseEvent>) => {
     if (!interactiveInScene) {
@@ -100,7 +98,7 @@ export function DipChip74LS83() {
     if (!interactiveInScene) {
       return;
     }
-    if (hovered.kind === 'chip') {
+    if (isChipHovered) {
       setHovered({ kind: 'none' });
     }
   };
@@ -205,8 +203,8 @@ export function DipChip74LS83() {
         const sideSign = spec.pinNumber <= 8 ? 1 : -1;
         const bodyEdgeZ = sideSign * (CHIP_WIDTH_Z * 0.5);
 
-        const isSelected = selection.kind === 'pin' && selection.pinNumber === spec.pinNumber;
-        const isHovered = hovered.kind === 'pin' && hovered.pinNumber === spec.pinNumber;
+        const isSelected = selectedPinNumber === spec.pinNumber;
+        const isHovered = hoveredPinNumber === spec.pinNumber;
         const isTraced = signalTrace?.pinNumber === spec.pinNumber;
 
         const leadColor =
@@ -261,11 +259,12 @@ export function DipChip74LS83() {
               if (!interactiveInScene) {
                 return;
               }
-              if (isRemoveMode && hovered.kind === 'chip') {
+              const currentHovered = useLabStore.getState().hovered;
+              if (isRemoveMode && currentHovered.kind === 'chip') {
                 setHovered({ kind: 'none' });
                 return;
               }
-              if (hovered.kind === 'pin' && hovered.pinNumber === spec.pinNumber) {
+              if (currentHovered.kind === 'pin' && currentHovered.pinNumber === spec.pinNumber) {
                 setHovered({ kind: 'none' });
               }
             }}

@@ -174,8 +174,11 @@ interface LabState {
   readonly guidedStage9QuizAnswers: Readonly<Record<string, number>>;
   readonly guidedActiveTab: 'guide' | 'inspector';
   readonly guidedPracticeUnlocked: boolean;
+  readonly isGuidedUnlocked: boolean;
 
   setMode: (mode: SimulatorMode) => void;
+  setGuidedUnlocked: (unlocked: boolean) => void;
+  toggleGuidedUnlocked: () => void;
   requestCameraPreset: (preset: CameraPreset) => void;
   resetCamera: () => void;
   setSelection: (selection: LabSelection) => void;
@@ -300,6 +303,7 @@ export const useLabStore = create<LabState>((set, get) => ({
   guidedStage9QuizAnswers: initialPersisted?.stage9QuizAnswers ?? {},
   guidedActiveTab: 'guide',
   guidedPracticeUnlocked: initialPracticeUnlocked,
+  isGuidedUnlocked: false,
 
   activeTool: 'select',
   activeKitItem: 'ic-74ls83a',
@@ -328,6 +332,21 @@ export const useLabStore = create<LabState>((set, get) => ({
             ? { kind: 'chip' }
             : { kind: 'none' },
     })),
+
+  setGuidedUnlocked: (isGuidedUnlocked) =>
+    set((state) => ({
+      isGuidedUnlocked,
+      mode: !isGuidedUnlocked && state.mode === 'guided' ? 'mounted' : state.mode,
+    })),
+
+  toggleGuidedUnlocked: () =>
+    set((state) => {
+      const nextUnlocked = !state.isGuidedUnlocked;
+      return {
+        isGuidedUnlocked: nextUnlocked,
+        mode: !nextUnlocked && state.mode === 'guided' ? 'mounted' : state.mode,
+      };
+    }),
 
   requestCameraPreset: (preset) =>
     set((state) => ({

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   GUIDED_STAGES,
   getGuidedStageByIndex,
@@ -73,19 +73,22 @@ export function GuidedAssemblyPanel() {
 
   // Auto-registro en etapa 8 si el circuito resuelve correctamente uno de los casos aritméticos
   const mathAdder = solution.adderOutput;
-  if (currentStageIndex === 7 && mathAdder !== null && currentStage.stage8TestCases) {
-    for (const tc of currentStage.stage8TestCases) {
-      if (
-        mathAdder.operandA === tc.operandA &&
-        mathAdder.operandB === tc.operandB &&
-        mathAdder.carryIn === tc.carryIn &&
-        mathAdder.totalValue === tc.expectedTotal &&
-        !stage8Cases.includes(tc.id)
-      ) {
-        recordStage8TestedCase(tc.id);
+  const stage8TestCases = currentStage.stage8TestCases;
+  useEffect(() => {
+    if (currentStageIndex === 7 && mathAdder !== null && stage8TestCases) {
+      for (const tc of stage8TestCases) {
+        if (
+          mathAdder.operandA === tc.operandA &&
+          mathAdder.operandB === tc.operandB &&
+          mathAdder.carryIn === tc.carryIn &&
+          mathAdder.totalValue === tc.expectedTotal &&
+          !stage8Cases.includes(tc.id)
+        ) {
+          recordStage8TestedCase(tc.id);
+        }
       }
     }
-  }
+  }, [currentStageIndex, mathAdder, stage8Cases, stage8TestCases, recordStage8TestedCase]);
 
   const renderStatusBadge = (status: GuidedStageStatus, isCurrent: boolean) => {
     switch (status) {

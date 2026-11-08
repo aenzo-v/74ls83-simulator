@@ -64,8 +64,12 @@ interface Led3DProps {
 export function Led3D({ descriptor, activeOverride }: Led3DProps) {
   const mode = useLabStore((s) => s.mode);
   const activeTool = useLabStore((s) => s.activeTool);
-  const selection = useLabStore((s) => s.selection);
-  const hovered = useLabStore((s) => s.hovered);
+  const isSelected = useLabStore(
+    (s) => s.selection.kind === 'component' && s.selection.componentId === descriptor.id,
+  );
+  const isHovered = useLabStore(
+    (s) => s.hovered.kind === 'component' && s.hovered.componentId === descriptor.id,
+  );
   const setSelection = useLabStore((s) => s.setSelection);
   const setHovered = useLabStore((s) => s.setHovered);
   const requestComponentRemoval = useLabStore((s) => s.requestComponentRemoval);
@@ -85,8 +89,6 @@ export function Led3D({ descriptor, activeOverride }: Led3DProps) {
 
   const ledState = solution.leds[descriptor.id];
   const isLit = activeOverride ?? Boolean(ledState?.isLit);
-  const isSelected = selection.kind === 'component' && selection.componentId === descriptor.id;
-  const isHovered = hovered.kind === 'component' && hovered.componentId === descriptor.id;
   const isTraced = Boolean(signalTrace?.componentIds.has(descriptor.id));
 
   const surfaceY = BREADBOARD_DIMENSIONS.heightY;
@@ -149,7 +151,7 @@ export function Led3D({ descriptor, activeOverride }: Led3DProps) {
         if (!interactiveInScene) {
           return;
         }
-        if (hovered.kind === 'component' && hovered.componentId === descriptor.id) {
+        if (isHovered) {
           setHovered({ kind: 'none' });
         }
       }}

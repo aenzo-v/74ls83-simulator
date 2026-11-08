@@ -39,7 +39,6 @@ function DipActuator({
   const setHovered = useLabStore((s) => s.setHovered);
   const toggleSwitchState = useLabStore((s) => s.toggleSwitchState);
   const requestComponentRemoval = useLabStore((s) => s.requestComponentRemoval);
-  const hovered = useLabStore((s) => s.hovered);
 
   useFrame((_, delta) => {
     const mesh = sliderRef.current;
@@ -118,7 +117,8 @@ function DipActuator({
           if (!interactiveInScene) {
             return;
           }
-          if (hovered.kind === 'component' && hovered.componentId === componentId) {
+          const currentHovered = useLabStore.getState().hovered;
+          if (currentHovered.kind === 'component' && currentHovered.componentId === componentId) {
             setHovered({ kind: 'none' });
           }
         }}
@@ -137,8 +137,22 @@ interface DipSwitch3DProps {
 export function DipSwitch3D({ descriptor }: DipSwitch3DProps) {
   const mode = useLabStore((s) => s.mode);
   const activeTool = useLabStore((s) => s.activeTool);
-  const selection = useLabStore((s) => s.selection);
-  const hovered = useLabStore((s) => s.hovered);
+  const isComponentSelected = useLabStore(
+    (s) => s.selection.kind === 'component' && s.selection.componentId === descriptor.id,
+  );
+  const isComponentHovered = useLabStore(
+    (s) => s.hovered.kind === 'component' && s.hovered.componentId === descriptor.id,
+  );
+  const hoveredSubChannelId = useLabStore((s) =>
+    s.hovered.kind === 'component' && s.hovered.componentId === descriptor.id
+      ? s.hovered.subChannelId
+      : null,
+  );
+  const selectedSubChannelId = useLabStore((s) =>
+    s.selection.kind === 'component' && s.selection.componentId === descriptor.id
+      ? s.selection.subChannelId
+      : null,
+  );
   const setSelection = useLabStore((s) => s.setSelection);
   const setHovered = useLabStore((s) => s.setHovered);
   const requestComponentRemoval = useLabStore((s) => s.requestComponentRemoval);
@@ -171,17 +185,9 @@ export function DipSwitch3D({ descriptor }: DipSwitch3DProps) {
     mode === 'mounted' || activeTool === 'select' || activeTool === 'remove';
   const isRemoveMode = mode === 'guided' && activeTool === 'remove';
 
-  const isComponentSelected =
-    selection.kind === 'component' && selection.componentId === descriptor.id;
-  const isComponentHovered =
-    hovered.kind === 'component' && hovered.componentId === descriptor.id;
-
   const hoveredChannel =
-    !isRemoveMode &&
-    hovered.kind === 'component' &&
-    hovered.componentId === descriptor.id &&
-    hovered.subChannelId
-      ? descriptor.channels.find((c) => c.id === hovered.subChannelId)
+    !isRemoveMode && hoveredSubChannelId
+      ? descriptor.channels.find((c) => c.id === hoveredSubChannelId)
       : undefined;
 
   const housingMaterial =
@@ -224,10 +230,11 @@ export function DipSwitch3D({ descriptor }: DipSwitch3DProps) {
           if (!interactiveInScene) {
             return;
           }
+          const currentHovered = useLabStore.getState().hovered;
           if (
-            hovered.kind === 'component' &&
-            hovered.componentId === descriptor.id &&
-            !hovered.subChannelId
+            currentHovered.kind === 'component' &&
+            currentHovered.componentId === descriptor.id &&
+            !currentHovered.subChannelId
           ) {
             setHovered({ kind: 'none' });
           }
@@ -253,9 +260,9 @@ export function DipSwitch3D({ descriptor }: DipSwitch3DProps) {
         const chX = topHole.position.x;
         const isChSelected =
           isComponentSelected &&
-          (!selection.subChannelId || selection.subChannelId === channel.id);
+          (!selectedSubChannelId || selectedSubChannelId === channel.id);
         const isChHovered =
-          isComponentHovered && hovered.subChannelId === channel.id;
+          isComponentHovered && hoveredSubChannelId === channel.id;
         const isChTraced = Boolean(signalTrace?.subChannelIds.has(channel.id));
 
         const leadMat =

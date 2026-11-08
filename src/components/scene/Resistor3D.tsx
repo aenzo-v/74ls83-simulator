@@ -18,8 +18,12 @@ interface Resistor3DProps {
 export function Resistor3D({ descriptor }: Resistor3DProps) {
   const mode = useLabStore((s) => s.mode);
   const activeTool = useLabStore((s) => s.activeTool);
-  const selection = useLabStore((s) => s.selection);
-  const hovered = useLabStore((s) => s.hovered);
+  const isSelected = useLabStore(
+    (s) => s.selection.kind === 'component' && s.selection.componentId === descriptor.id,
+  );
+  const isHovered = useLabStore(
+    (s) => s.hovered.kind === 'component' && s.hovered.componentId === descriptor.id,
+  );
   const setSelection = useLabStore((s) => s.setSelection);
   const setHovered = useLabStore((s) => s.setHovered);
   const requestComponentRemoval = useLabStore((s) => s.requestComponentRemoval);
@@ -93,8 +97,6 @@ export function Resistor3D({ descriptor }: Resistor3DProps) {
     mode === 'mounted' || activeTool === 'select' || activeTool === 'remove';
   const isRemoveMode = mode === 'guided' && activeTool === 'remove';
 
-  const isSelected = selection.kind === 'component' && selection.componentId === descriptor.id;
-  const isHovered = hovered.kind === 'component' && hovered.componentId === descriptor.id;
   const isTraced = Boolean(signalTrace?.componentIds.has(descriptor.id));
 
   const leadMaterial =
@@ -143,7 +145,7 @@ export function Resistor3D({ descriptor }: Resistor3DProps) {
         if (!interactiveInScene) {
           return;
         }
-        if (hovered.kind === 'component' && hovered.componentId === descriptor.id) {
+        if (isHovered) {
           setHovered({ kind: 'none' });
         }
       }}

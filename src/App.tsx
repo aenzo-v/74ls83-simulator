@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { LabCanvas } from './components/scene/LabCanvas';
 import { EditorToolbar } from './components/ui/EditorToolbar';
+import { ErrorBoundary } from './components/ui/ErrorBoundary';
 import { InspectionPanel } from './components/ui/InspectionPanel';
 import { OperationBar } from './components/ui/OperationBar';
 import { PinoutModal } from './components/ui/PinoutModal';
@@ -97,7 +98,9 @@ export function App() {
       <div className="flex min-h-0 flex-1 overflow-hidden">
         <main className="flex min-w-0 flex-1 flex-col overflow-hidden">
           <div className="relative min-h-0 flex-1">
-            <LabCanvas />
+            <ErrorBoundary fallbackTitle="Error en el entorno 3D WebGL">
+              <LabCanvas />
+            </ErrorBoundary>
             <ViewportHud />
           </div>
           <OperationBar />
