@@ -13,6 +13,8 @@ export function TopBar() {
   const isSidebarOpen = useLabStore((s) => s.isSidebarOpen);
   const toggleSidebar = useLabStore((s) => s.toggleSidebar);
   const togglePowerSupply = useLabStore((s) => s.togglePowerSupply);
+  const isEnergyFlowVisible = useLabStore((s) => s.isEnergyFlowVisible);
+  const toggleEnergyFlow = useLabStore((s) => s.toggleEnergyFlow);
   const solution = useCircuitSolution();
 
   const clickCountRef = useRef(0);
@@ -289,6 +291,27 @@ export function TopBar() {
           >
             <span className="hidden md:inline">Pinout / Ayuda</span>
             <span className="md:hidden">Pinout</span>
+          </button>
+
+          {/* Flujo de energía visual */}
+          <button
+            type="button"
+            onClick={toggleEnergyFlow}
+            aria-pressed={isEnergyFlowVisible}
+            title={
+              isEnergyFlowVisible
+                ? 'Ocultar visuales de flujo de energía eléctrica (corriente convencional +5 V → GND)'
+                : 'Mostrar visuales dinámicos de flujo de energía eléctrica en 3D'
+            }
+            className={`cursor-pointer flex items-center gap-1.5 rounded-xl border px-2.5 py-1 text-xs font-medium transition-colors sm:px-3 ${
+              isEnergyFlowVisible
+                ? 'border-[#35C2D1]/60 bg-[#142A35]/90 text-[#35C2D1] font-semibold shadow-xs ring-1 ring-[#35C2D1]/40'
+                : 'border-zinc-800 bg-zinc-900/80 text-zinc-400 hover:text-white hover:border-zinc-600'
+            }`}
+          >
+            <span className={isEnergyFlowVisible ? 'text-[#FFD043] animate-pulse' : 'text-zinc-500'}>⚡</span>
+            <span className="hidden md:inline">Flujo de energía</span>
+            <span className="md:hidden">Flujo</span>
           </button>
 
           {/* Inspector */}

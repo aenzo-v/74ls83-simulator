@@ -1,10 +1,13 @@
 import { Html } from '@react-three/drei';
-import { useEffect, useMemo } from 'react';
+import { useFrame } from '@react-three/fiber';
+import { useEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import { resolveTerminalPosition } from '../../data/circuitLayout';
 import { buildWireSplinePoints, type WireRoutingObstacles } from '../../data/wireRouting';
 import type { JumperWireDescriptor } from '../../simulator/components';
+import type { FlowDirection } from '../../simulator/energyFlow';
 import {
+  useCircuitEnergyFlow,
   useCircuitSolution,
   useDisplayedCircuit,
   useSignalTrace,
@@ -26,6 +29,87 @@ const INVISIBLE_HIT_MATERIAL = new THREE.MeshBasicMaterial({
 
 const ENDPOINT_RING_GEOMETRY = new THREE.RingGeometry(0.088, 0.128, 22);
 
+const WIRE_FLOW_VERTEX_SHADER = `
+  varying vec2 vUv;
+  void main() {
+    vUv = uv;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  }
+`;
+
+const WIRE_FLOW_FRAGMENT_SHADER = `
+  uniform float uTime;
+  uniform vec3 uColor;
+  uniform float uSpeed;
+  uniform float uFrequency;
+  uniform float uBaseGlow;
+  varying vec2 vUv;
+  void main() {
+    float coord = vUv.x * uFrequency - uTime * uSpeed;
+    float pulse = fract(coord);
+    float head = smoothstep(0.0, 0.28, pulse);
+    float tail = smoothstep(0.92, 0.28, pulse);
+    float shape = head * tail;
+    float intensity = pow(shape, 2.2);
+
+    float totalLight = uBaseGlow + intensity * 1.6;
+    vec3 col = uColor * (totalLight * 1.35);
+    float alpha = clamp(uBaseGlow * 0.35 + intensity * 0.88, 0.0, 1.0);
+
+    gl_FragColor = vec4(col, alpha);
+  }
+`;
+
+interface WireEnergyFlowMeshProps {
+  readonly geometry: THREE.TubeGeometry;
+  readonly colorHex: string;
+  readonly direction: FlowDirection;
+  readonly speedMultiplier: number;
+  readonly length: number;
+}
+
+function WireEnergyFlowMesh({
+  geometry,
+  colorHex,
+  direction,
+  speedMultiplier,
+  length,
+}: WireEnergyFlowMeshProps) {
+  const matRef = useRef<THREE.ShaderMaterial | null>(null);
+
+  const uniforms = useMemo(
+    () => ({
+      uTime: { value: 0 },
+      uColor: { value: new THREE.Color(colorHex) },
+      uSpeed: { value: (direction === 'FORWARD' ? 1.75 : -1.75) * speedMultiplier },
+      uFrequency: { value: Math.max(2.4, Math.min(8.5, length * 1.35)) },
+      uBaseGlow: { value: 0.16 },
+    }),
+    [colorHex, direction, length, speedMultiplier],
+  );
+
+  useFrame((_, delta) => {
+    if (matRef.current) {
+      matRef.current.uniforms.uTime.value += delta;
+    }
+  });
+
+  return (
+    <mesh geometry={geometry} renderOrder={2}>
+      <shaderMaterial
+        ref={matRef}
+        uniforms={uniforms}
+        vertexShader={WIRE_FLOW_VERTEX_SHADER}
+        fragmentShader={WIRE_FLOW_FRAGMENT_SHADER}
+        transparent
+        depthWrite={false}
+        blending={THREE.AdditiveBlending}
+        side={THREE.DoubleSide}
+      />
+    </mesh>
+  );
+}
+
 interface JumperWire3DProps {
   readonly descriptor: JumperWireDescriptor;
   readonly obstacles?: WireRoutingObstacles;
@@ -43,8 +127,11 @@ export function JumperWire3D({ descriptor, obstacles }: JumperWire3DProps) {
   const setSelection = useLabStore((s) => s.setSelection);
   const setHovered = useLabStore((s) => s.setHovered);
   const deleteWire = useLabStore((s) => s.deleteWire);
+  const isEnergyFlowVisible = useLabStore((s) => s.isEnergyFlowVisible);
   const solution = useCircuitSolution();
   const signalTrace = useSignalTrace();
+  const energyFlow = useCircuitEnergyFlow();
+  const wireFlow = energyFlow.wireFlows[descriptor.id];
 
   const startPos = resolveTerminalPosition(descriptor.fromTerminalId);
   const endPos = resolveTerminalPosition(descriptor.toTerminalId);
@@ -62,20 +149,26 @@ export function JumperWire3D({ descriptor, obstacles }: JumperWire3DProps) {
 
     // Conductor flexible aislado de calibre realista (~1.0 mm diámetro exterior)
     const tubeGeometry = new THREE.TubeGeometry(curve, segments, 0.05, 12, false);
+    // Tubo envolvente para visualización de energía eléctrica (ligeramente mayor radio)
+    const flowTubeGeometry = new THREE.TubeGeometry(curve, segments, 0.058, 10, false);
     // Tubo envolvente invisible para facilitar la selección individual con puntero
     const hitTubeGeometry = new THREE.TubeGeometry(curve, 24, 0.095, 8, false);
     const midPoint = curve.getPointAt(0.5);
+    const length = curve.getLength();
 
     return {
       tubeGeometry,
+      flowTubeGeometry,
       hitTubeGeometry,
       midPoint,
+      length,
     };
   }, [descriptor.id, endPos, obstacles, startPos]);
 
   useEffect(() => {
     return () => {
       wireData?.tubeGeometry.dispose();
+      wireData?.flowTubeGeometry.dispose();
       wireData?.hitTubeGeometry.dispose();
     };
   }, [wireData]);
@@ -165,6 +258,17 @@ export function JumperWire3D({ descriptor, obstacles }: JumperWire3DProps) {
         castShadow={!isDimmedByTrace}
       />
 
+      {/* Malla dinámica de flujo de energía eléctrica sobre el conductor */}
+      {isEnergyFlowVisible && wireFlow?.isConducting && wireFlow.direction !== 'NONE' && (
+        <WireEnergyFlowMesh
+          geometry={wireData.flowTubeGeometry}
+          colorHex={wireFlow.colorHex}
+          direction={wireFlow.direction}
+          speedMultiplier={wireFlow.speedMultiplier}
+          length={wireData.length}
+        />
+      )}
+
       {/* Volumen táctil/puntero invisible para selección individual precisa */}
       <mesh geometry={wireData.hitTubeGeometry} material={INVISIBLE_HIT_MATERIAL} />
 
@@ -240,10 +344,18 @@ export function JumperWire3D({ descriptor, obstacles }: JumperWire3DProps) {
             center
             style={{ pointerEvents: 'none' }}
           >
-            <div className="whitespace-nowrap rounded-md border border-[#F1B85A]/75 bg-[#10141B]/95 px-2 py-0.5 font-mono text-[10px] text-[#E9EDF2] shadow-lg">
-              <span className="font-bold text-[#F1B85A]">{descriptor.signal ?? descriptor.id}</span>
-              <span className="mx-1 text-[#AEB8C5]">·</span>
-              <span className="text-[#6DD19C]">{resolvedNetId}</span>
+            <div className="whitespace-nowrap rounded-md border border-[#F1B85A]/75 bg-[#10141B]/95 px-2.5 py-1 font-mono text-[10px] text-[#E9EDF2] shadow-lg">
+              <div className="flex items-center gap-1.5">
+                <span className="font-bold text-[#F1B85A]">{descriptor.signal ?? descriptor.id}</span>
+                <span className="text-[#AEB8C5]">·</span>
+                <span className="text-[#6DD19C]">{resolvedNetId}</span>
+              </div>
+              {isEnergyFlowVisible && wireFlow?.isConducting && (
+                <div className="mt-1 flex items-center gap-1 border-t border-[#F1B85A]/30 pt-1 text-[9.5px] text-[#FFD043]">
+                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#3CE08D]" />
+                  <span>⚡ {wireFlow.descriptionEs}</span>
+                </div>
+              )}
             </div>
           </Html>
         </>
@@ -262,16 +374,24 @@ export function JumperWire3D({ descriptor, obstacles }: JumperWire3DProps) {
               {descriptor.toTerminalId})
             </div>
           ) : (
-            <div className="whitespace-nowrap rounded-md border border-[#35C2D1]/50 bg-[#10141B]/95 px-2 py-1 font-mono text-[11px] text-[#E9EDF2] shadow-lg">
-              <span className="font-semibold text-[#35C2D1]">
-                {descriptor.signal ?? descriptor.id}
-              </span>
-              <span className="mx-1.5 text-[#AEB8C5]">·</span>
-              <span className="text-[#E9EDF2]">{descriptor.fromTerminalId}</span>
-              <span className="mx-1 text-[#AEB8C5]">→</span>
-              <span className="text-[#E9EDF2]">{descriptor.toTerminalId}</span>
-              <span className="mx-1.5 text-[#AEB8C5]">·</span>
-              <span className="text-[#6DD19C]">{resolvedNetId}</span>
+            <div className="whitespace-nowrap rounded-md border border-[#35C2D1]/50 bg-[#10141B]/95 px-2.5 py-1 font-mono text-[11px] text-[#E9EDF2] shadow-lg">
+              <div className="flex items-center gap-1.5">
+                <span className="font-semibold text-[#35C2D1]">
+                  {descriptor.signal ?? descriptor.id}
+                </span>
+                <span className="text-[#AEB8C5]">·</span>
+                <span className="text-[#E9EDF2]">{descriptor.fromTerminalId}</span>
+                <span className="text-[#AEB8C5]">→</span>
+                <span className="text-[#E9EDF2]">{descriptor.toTerminalId}</span>
+                <span className="text-[#AEB8C5]">·</span>
+                <span className="text-[#6DD19C]">{resolvedNetId}</span>
+              </div>
+              {isEnergyFlowVisible && wireFlow?.isConducting && (
+                <div className="mt-1 flex items-center gap-1 border-t border-[#35C2D1]/30 pt-1 text-[9.5px] text-[#FFD043]">
+                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#3CE08D]" />
+                  <span>⚡ {wireFlow.descriptionEs}</span>
+                </div>
+              )}
             </div>
           )}
         </Html>

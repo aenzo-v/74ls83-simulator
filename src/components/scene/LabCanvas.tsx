@@ -6,6 +6,7 @@ import { Breadboard3D } from './Breadboard3D';
 import { CameraRig } from './CameraRig';
 import { DipChip74LS83 } from './DipChip74LS83';
 import { DipSwitchesGroup } from './DipSwitch3D';
+import { EnergyFlow3D } from './EnergyFlow3D';
 import { GuidedStageHighlights3D } from './GuidedStageHighlights3D';
 import { InteractiveWorkbench3D } from './InteractiveWorkbench3D';
 import { JumperWiresGroup } from './JumperWire3D';
@@ -56,6 +57,7 @@ export function LabCanvas() {
           <ResistorsGroup />
           <LedsGroup />
           <JumperWiresGroup />
+          <EnergyFlow3D />
           <InteractiveWorkbench3D />
           <GuidedStageHighlights3D />
         </Suspense>

@@ -136,6 +136,11 @@ interface LabState {
   readonly tracedSignal: SignalCode | null;
 
   /**
+   * Controla la visualización tridimensional dinámica del flujo de energía y corriente convencional (+5 V → GND).
+   */
+  readonly isEnergyFlowVisible: boolean;
+
+  /**
    * Estado mecánico de los interruptores del circuito de referencia (`mode === 'mounted'`).
    */
   readonly switchStates: Readonly<Record<string, boolean>>;
@@ -189,6 +194,8 @@ interface LabState {
 
   setTracedSignal: (signal: SignalCode | null) => void;
   toggleTracedSignal: (signal: SignalCode) => void;
+  toggleEnergyFlow: () => void;
+  setEnergyFlowVisible: (visible: boolean) => void;
 
   toggleSwitchState: (channelOrSupplyId: string) => void;
   setSwitchState: (channelOrSupplyId: string, active: boolean) => void;
@@ -287,6 +294,7 @@ export const useLabStore = create<LabState>((set, get) => ({
   isHelpModalOpen: false,
   isSidebarOpen: true,
   tracedSignal: null,
+  isEnergyFlowVisible: true,
   switchStates: buildInitialSwitchStates(),
 
   workingCircuit: initialPersisted?.workingCircuit ?? createEmptyWorkingCircuit(),
@@ -376,6 +384,13 @@ export const useLabStore = create<LabState>((set, get) => ({
     set((state) => ({
       tracedSignal: state.tracedSignal === signal ? null : signal,
     })),
+
+  toggleEnergyFlow: () =>
+    set((state) => ({
+      isEnergyFlowVisible: !state.isEnergyFlowVisible,
+    })),
+
+  setEnergyFlowVisible: (isEnergyFlowVisible) => set({ isEnergyFlowVisible }),
 
   toggleSwitchState: (channelOrSupplyId) =>
     set((state) => {

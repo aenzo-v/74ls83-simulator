@@ -6,6 +6,10 @@ import {
   workingCircuitToSolverInput,
 } from '../simulator/editableCircuit';
 import { type CircuitSolution, solveCircuit } from '../simulator/netlist';
+import {
+  type CircuitEnergyFlowState,
+  computeCircuitEnergyFlow,
+} from '../simulator/energyFlow';
 import { type SignalTraceResult, traceSignalPath } from '../simulator/signalTrace';
 import type { SignalCode, SimulatorMode } from '../simulator/types';
 import { useLabStore } from './useLabStore';
@@ -148,5 +152,56 @@ export function useSignalTrace(): SignalTraceResult | null {
         tracedSignal,
       ),
     [mode, solution, switchStates, tracedSignal, workingCircuit, workingSwitchStates],
+  );
+}
+
+let lastEnergyFlowSolution: CircuitSolution | null = null;
+let cachedEnergyFlow: CircuitEnergyFlowState | null = null;
+
+/**
+ * Resuelve el flujo dinámico de energía eléctrica y corriente convencional con caché referencial.
+ */
+export function resolveCurrentCircuitEnergyFlow(
+  mode: SimulatorMode,
+  switchStates: Readonly<Record<string, boolean>>,
+  workingCircuit: WorkingCircuitState,
+  workingSwitchStates: Readonly<Record<string, boolean>>,
+  solution: CircuitSolution,
+): CircuitEnergyFlowState {
+  if (cachedEnergyFlow !== null && lastEnergyFlowSolution === solution) {
+    return cachedEnergyFlow;
+  }
+
+  const input =
+    mode === 'mounted'
+      ? createCanonicalCircuitInput(switchStates)
+      : workingCircuitToSolverInput(workingCircuit, workingSwitchStates);
+
+  cachedEnergyFlow = computeCircuitEnergyFlow(input, solution);
+  lastEnergyFlowSolution = solution;
+  return cachedEnergyFlow;
+}
+
+/**
+ * Selector derivado memoizado que calcula en tiempo real el flujo de energía y sentido de corriente
+ * convencional para cada conductor, rieles de protoboard y componentes del circuito.
+ */
+export function useCircuitEnergyFlow(): CircuitEnergyFlowState {
+  const mode = useLabStore((s) => s.mode);
+  const switchStates = useLabStore((s) => s.switchStates);
+  const workingCircuit = useLabStore((s) => s.workingCircuit);
+  const workingSwitchStates = useLabStore((s) => s.workingSwitchStates);
+  const solution = useCircuitSolution();
+
+  return useMemo(
+    () =>
+      resolveCurrentCircuitEnergyFlow(
+        mode,
+        switchStates,
+        workingCircuit,
+        workingSwitchStates,
+        solution,
+      ),
+    [mode, solution, switchStates, workingCircuit, workingSwitchStates],
   );
 }

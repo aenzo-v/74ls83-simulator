@@ -7,6 +7,7 @@ import {
   getChipMountedTerminalsForColumn,
 } from '../../simulator/editableCircuit';
 import {
+  useCircuitEnergyFlow,
   useCircuitSolution,
   useDisplayedCircuit,
   useSignalTrace,
@@ -28,10 +29,13 @@ export function ViewportHud() {
   const selection = useLabStore((s) => s.selection);
   const setTracedSignal = useLabStore((s) => s.setTracedSignal);
   const setPowerSupplyOn = useLabStore((s) => s.setPowerSupplyOn);
+  const isEnergyFlowVisible = useLabStore((s) => s.isEnergyFlowVisible);
+  const toggleEnergyFlow = useLabStore((s) => s.toggleEnergyFlow);
 
   const circuit = useDisplayedCircuit();
   const solution = useCircuitSolution();
   const signalTrace = useSignalTrace();
+  const energyFlow = useCircuitEnergyFlow();
 
   const mountedByPin = useMemo(() => {
     if (!circuit.chip) {
@@ -76,7 +80,10 @@ export function ViewportHud() {
     const wire = findWireInCircuit(circuit, hovered.wireId);
     if (wire) {
       const wireNet = solution.wires[wire.id]?.netId ?? 'SIN-RED';
-      readoutText = `${wire.label} · ${wire.fromTerminalId} → ${wire.toTerminalId} · ${wireNet}`;
+      const wireFlow = energyFlow.wireFlows[wire.id];
+      const flowSuffix =
+        isEnergyFlowVisible && wireFlow?.isConducting ? ` · ⚡ ${wireFlow.descriptionEs}` : '';
+      readoutText = `${wire.label} · ${wire.fromTerminalId} → ${wire.toTerminalId} · ${wireNet}${flowSuffix}`;
       badgeTone = 'hover';
     }
   } else if (hovered.kind === 'hole') {
@@ -106,7 +113,10 @@ export function ViewportHud() {
     const wire = findWireInCircuit(circuit, selection.wireId);
     if (wire) {
       const wireNet = solution.wires[wire.id]?.netId ?? 'SIN-RED';
-      readoutText = `Cable ${wire.id}: ${wire.fromTerminalId} → ${wire.toTerminalId} (${wireNet})`;
+      const wireFlow = energyFlow.wireFlows[wire.id];
+      const flowSuffix =
+        isEnergyFlowVisible && wireFlow?.isConducting ? ` · ⚡ ${wireFlow.descriptionEs}` : '';
+      readoutText = `Cable ${wire.id}: ${wire.fromTerminalId} → ${wire.toTerminalId} (${wireNet})${flowSuffix}`;
       badgeTone = 'selected';
     }
   } else if (selection.kind === 'breadboard' && selection.holeId) {
@@ -213,36 +223,69 @@ export function ViewportHud() {
 
       {/* Fila inferior: controles rápidos de cámara y guía de navegación */}
       <div className="flex flex-wrap items-end justify-between gap-2">
-        <div
-          role="toolbar"
-          aria-label="Vistas de cámara"
-          className="pointer-events-auto flex items-center gap-1 rounded-xl border border-zinc-800/80 bg-zinc-950/90 p-1 shadow-lg backdrop-blur-md"
-        >
-          {CAMERA_BUTTONS.map(({ preset, label }) => {
-            const active = cameraPreset === preset;
-            return (
-              <button
-                key={preset}
-                type="button"
-                onClick={() => requestCameraPreset(preset)}
-                className={`cursor-pointer rounded-lg px-3 py-1 text-[11px] font-medium transition-all ${
-                  active
-                    ? 'bg-white text-black font-semibold shadow-xs ring-1 ring-white/50'
-                    : 'text-zinc-400 hover:bg-zinc-800 hover:text-white'
-                }`}
-              >
-                {label}
-              </button>
-            );
-          })}
-          <div className="mx-0.5 h-4 w-px bg-zinc-800" />
+        {/* Controles de cámara */}
+        <div className="flex flex-wrap items-center gap-2">
+          <div
+            role="toolbar"
+            aria-label="Vistas de cámara"
+            className="pointer-events-auto flex items-center gap-1 rounded-xl border border-zinc-800/80 bg-zinc-950/90 p-1 shadow-lg backdrop-blur-md"
+          >
+            {CAMERA_BUTTONS.map(({ preset, label }) => {
+              const active = cameraPreset === preset;
+              return (
+                <button
+                  key={preset}
+                  type="button"
+                  onClick={() => requestCameraPreset(preset)}
+                  className={`cursor-pointer rounded-lg px-3 py-1 text-[11px] font-medium transition-all ${
+                    active
+                      ? 'bg-white text-black font-semibold shadow-xs ring-1 ring-white/50'
+                      : 'text-zinc-400 hover:bg-zinc-800 hover:text-white'
+                  }`}
+                >
+                  {label}
+                </button>
+              );
+            })}
+            <div className="mx-0.5 h-4 w-px bg-zinc-800" />
+            <button
+              type="button"
+              onClick={resetCamera}
+              className="cursor-pointer rounded-lg px-2.5 py-1 text-[11px] font-medium text-zinc-400 transition-colors hover:bg-zinc-800 hover:text-white"
+              title="Volver al encuadre inicial de laboratorio"
+            >
+              Encuadrar
+            </button>
+          </div>
+
+          {/* Badge interactivo de flujo de energía */}
           <button
             type="button"
-            onClick={resetCamera}
-            className="cursor-pointer rounded-lg px-2.5 py-1 text-[11px] font-medium text-zinc-400 transition-colors hover:bg-zinc-800 hover:text-white"
-            title="Volver al encuadre inicial de laboratorio"
+            onClick={toggleEnergyFlow}
+            title={isEnergyFlowVisible ? 'Clic para ocultar flujo de energía' : 'Clic para mostrar flujo de energía'}
+            className={`pointer-events-auto cursor-pointer flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-[11px] font-mono shadow-lg backdrop-blur-md transition-colors ${
+              isEnergyFlowVisible
+                ? 'border-[#35C2D1]/40 bg-zinc-950/90 text-zinc-200 hover:border-[#35C2D1]/70'
+                : 'border-zinc-800/80 bg-zinc-950/80 text-zinc-500 hover:text-zinc-300'
+            }`}
           >
-            Encuadrar
+            <span
+              className={`h-2 w-2 rounded-full ${
+                !isEnergyFlowVisible
+                  ? 'bg-zinc-600'
+                  : energyFlow.isPowered
+                    ? 'bg-[#3CE08D] shadow-[0_0_8px_rgba(60,224,141,0.8)] animate-pulse'
+                    : 'bg-zinc-500'
+              }`}
+            />
+            <span className="font-semibold">⚡ Flujo:</span>
+            <span className={isEnergyFlowVisible && energyFlow.isPowered ? 'text-[#35C2D1]' : 'text-zinc-400'}>
+              {!isEnergyFlowVisible
+                ? 'Oculto'
+                : energyFlow.isPowered
+                  ? `${energyFlow.conductingWiresCount} conductores activos`
+                  : 'STBY'}
+            </span>
           </button>
         </div>
 

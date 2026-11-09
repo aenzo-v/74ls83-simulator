@@ -19,6 +19,7 @@ import { getPinSpecBySignal } from '../../simulator/pinout74ls83';
 import type { PinDirection, SignalCode } from '../../simulator/types';
 import {
   useActiveSwitchStates,
+  useCircuitEnergyFlow,
   useCircuitSolution,
   useDisplayedCircuit,
 } from '../../store/useCircuitSolution';
@@ -154,6 +155,7 @@ export function InspectionPanel() {
   const circuit = useDisplayedCircuit();
   const switchStates = useActiveSwitchStates();
   const solution = useCircuitSolution();
+  const energyFlow = useCircuitEnergyFlow();
 
   const mountedPins = useMemo(
     () => (circuit.chip ? getChipMountedTerminalsForColumn(circuit.chip.startColumn) : []),
@@ -837,6 +839,52 @@ export function InspectionPanel() {
               </div>
 
               {wire.signal && renderTraceButton(wire.signal)}
+
+              {/* Información didáctica de flujo de corriente y energía */}
+              {(() => {
+                const wireFlow = energyFlow.wireFlows[wire.id];
+                if (!wireFlow) return null;
+                return (
+                  <div
+                    className={`rounded-lg border p-2.5 text-xs ${
+                      wireFlow.isConducting
+                        ? 'border-[#35C2D1]/40 bg-[#142A35]/50 text-white'
+                        : 'border-zinc-800 bg-zinc-950/60 text-zinc-400'
+                    }`}
+                  >
+                    <div className="mb-1 flex items-center justify-between">
+                      <span className="flex items-center gap-1.5 font-mono text-[10px] font-semibold uppercase tracking-wider text-zinc-300">
+                        <span className={wireFlow.isConducting ? 'animate-pulse text-[#FFD043]' : 'text-zinc-600'}>
+                          ⚡
+                        </span>
+                        Flujo de energía
+                      </span>
+                      <span
+                        className={`rounded px-1.5 py-0.5 font-mono text-[10px] ${
+                          wireFlow.isConducting
+                            ? 'bg-[#35C2D1]/20 font-semibold text-[#35C2D1]'
+                            : 'bg-zinc-800 text-zinc-400'
+                        }`}
+                      >
+                        {wireFlow.isConducting ? 'Conduciendo' : 'En reposo'}
+                      </span>
+                    </div>
+                    <p className="text-[11px] leading-relaxed text-zinc-300">
+                      {wireFlow.descriptionEs}
+                    </p>
+                    {wireFlow.isConducting && (
+                      <div className="mt-1.5 flex items-center justify-between border-t border-zinc-800/80 pt-1.5 font-mono text-[10px] text-zinc-400">
+                        <span>Sentido convencional:</span>
+                        <span className="text-zinc-200">
+                          {wireFlow.direction === 'FORWARD'
+                            ? `${wire.fromTerminalId} → ${wire.toTerminalId}`
+                            : `${wire.toTerminalId} → ${wire.fromTerminalId}`}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                );
+              })()}
 
               {/* Acciones de edición en modo Montaje Editable */}
               {mode === 'guided' && (
